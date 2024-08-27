@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
 import App from "../App";
+import Dashboard from "../pages/Admin/Dashboard";
+import HomeIndex from "../pages/Home";
 
 const router = createBrowserRouter([
   {
@@ -8,19 +9,23 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "",
-        element: <Home />,
+        path: ":lang",
+        element: <HomeIndex />,
       },
       {
-        path: ":lang",
-        element: <Home />,
-        children: [
+        path:":lang/admin",
+        element:<Dashboard/>,
+        children:[
           {
-            path: ":any",
-            element: <h2>helo</h2>,
+            path:"",
+            element:<h1>home</h1>
           },
-        ],
-      },
+          {
+            path:"dot",
+            element:<h3>dot</h3>
+          }
+        ]
+      }
     ],
   },
 ]);

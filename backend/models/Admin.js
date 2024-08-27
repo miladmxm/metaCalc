@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcrypt from 'bcryptjs'
 const AdminSchema = new mongoose.Schema({
     username:{
         type:String,
@@ -18,9 +18,9 @@ const AdminSchema = new mongoose.Schema({
 AdminSchema.pre("save",function(next){
     const admin =this
     if(!admin.isModified("password")){return next()}
-    bcrypt.hash(user.password, 10, (err, hash) => {
+    bcrypt.hash(admin.password, 10, (err, hash) => {
         if (err) return next(err)
-        user.password = hash
+        admin.password = hash
         next()
     })
 })

@@ -4,10 +4,12 @@ import dotEnv from 'dotenv'
 
 import {adminRouter,mainRouter} from './routes/router.js'
 import connectDB from './db/connect.js'
+import cookieParser from 'cookie-parser'
 
 dotEnv.config()
 const app = express()
 connectDB()
+app.use(cookieParser())
 
 app.use(cors())
 
