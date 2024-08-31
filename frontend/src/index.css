@@ -117,11 +117,31 @@
     --primary: 23, 130, 199;
     --success: 51, 238, 68;
     --error: 238, 51, 67;
+    --warning: 166, 184, 37;
   }
   :root.dark {
     --baseColor: 27, 29, 39;
     --text: 233, 237, 255;
   }
+  
+  .scrollbar::-webkit-scrollbar {
+    width: .375rem!important;
+    height: .375rem!important;
+    @apply bg-text/10 overflow-hidden rounded-full
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/40 rounded-full border border-text;
+  }
+
+  /* .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  } */
+  
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

@@ -10,6 +10,7 @@ export default {
         text: "rgba(var(--text), <alpha-value>)",
         success: "rgba(var(--success), <alpha-value>)",
         error: "rgba(var(--error), <alpha-value>)",
+        warning: "rgba(var(--warning), <alpha-value>)",
       },
       fontFamily: {
         Yekan: ["Yekan", "Inter", "system-ui"],

@@ -9,7 +9,7 @@ const MainLayout = ({ children }) => {
   const location = useLocation()
   const isWeekly = location.pathname.includes("weekly")
   return (
-    <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative">
+    <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative overflow-hidden">
       <InstallPWAbtn/>
       <header dir="ltr" className={`flex items-center justify-between transition-all duration-300 ${isWeekly?"h-10":"h-20"} `}>
         <div className="flex-1 justify-start flex">
@@ -22,8 +22,8 @@ const MainLayout = ({ children }) => {
           <ThemeSwitch />
         </div>
       </header>
-      <section className="flex-auto max-h-[80%]">{children}</section>
-      <footer className="dark:bg-primary/10 bg-primary/60 rounded-lg">
+      <section className="flex-auto max-h-[83%]">{children}</section>
+      <footer className="dark:bg-primary/10 bg-primary/60 rounded-lg absolute bottom-5 left-3 right-3 md:left-8 md:right-8">
         <nav>
           <ul className="flex justify-between items-center [&>li]:w-1/3">
             <li>
