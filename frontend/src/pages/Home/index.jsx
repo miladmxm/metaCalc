@@ -1,12 +1,12 @@
+import { Outlet } from 'react-router-dom'
 import MainLayout from '../../layouts/main'
-import Home from './home'
 
-const HomeIndex = () => {
+const MainIndex = () => {
   return (
     <MainLayout>
-        <Home/>
+        <Outlet/>
     </MainLayout>
   )
 }
 
-export default HomeIndex
+export default MainIndex

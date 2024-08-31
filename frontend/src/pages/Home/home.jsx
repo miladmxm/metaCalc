@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mainContext } from "../../context/main";
 import calculateMeta from "../../utils/calculate";
-import MainLayout from '../../layouts/main'
 const Home = () => {
   const { t } = useTranslation();
   const { Indexes, activeIndex, setActiveById } = useContext(mainContext);

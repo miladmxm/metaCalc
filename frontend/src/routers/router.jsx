@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Dashboard from "../pages/Admin/Dashboard";
-import HomeIndex from "../pages/Home";
+import MainIndex from "../pages/Home";
+import Home from "../pages/Home/home";
+import Weekly from "../pages/Home/weekly";
 
 const router = createBrowserRouter([
   {
@@ -10,7 +12,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: ":lang",
-        element: <HomeIndex />,
+        element: <MainIndex />,
+        children:[
+          {
+            path:"",
+            element:<Home/>
+          },
+          {
+            path:"weekly",
+            element:<Weekly/>
+          },
+          {
+            path:"login",
+            element:<h2>login</h2>
+          }
+        ]
       },
       {
         path:":lang/admin",
