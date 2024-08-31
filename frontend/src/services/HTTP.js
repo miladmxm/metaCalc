@@ -6,7 +6,7 @@ const http =axios.create({
 
 export const getMain =async ()=>{
     try {
-        const {data} =await http.get("/")
+        const {data} =await http.get("/api/")
         return data;
     } catch (err) {
         console.log(err)

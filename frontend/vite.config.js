@@ -7,11 +7,15 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       name: "Meta Calculator",
       short_name: "MetaCalc",
       theme_color: "#1b1d27",
       background_color: "#1b1d27",
+      display: "standalone",
+      scope: "/",
+      start_url: "/",
+      orientation: "portrait",
       icons: [
         {
           src: "pwa-64x64.png",
