@@ -3,12 +3,14 @@ import logo from "../assets/Images/meta.webp";
 import ThemeSwitch from "../components/ThemeSwitch";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import InstallPWAbtn from "../components/installPWAbtn";
 const MainLayout = ({ children }) => {
   const {t} = useTranslation()
   const location = useLocation()
   const isWeekly = location.pathname.includes("weekly")
   return (
-    <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7">
+    <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative">
+      <InstallPWAbtn/>
       <header dir="ltr" className={`flex items-center justify-between transition-all duration-300 ${isWeekly?"h-10":"h-20"} `}>
         <div className="flex-1 justify-start flex">
           <LanguageSwitch className="flex-1" />
