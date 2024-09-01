@@ -39,7 +39,6 @@ export const loginAdmin = async (req, res) => {
         .status(404)
         .json({ message: "username or password is not correct" });
     const comparePassword =await bcrypt.compare(password, admin.password);
-    console.log(comparePassword)
     if (!comparePassword)
       return res
         .status(404)
