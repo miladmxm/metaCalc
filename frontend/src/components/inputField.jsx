@@ -1,13 +1,16 @@
 import { useRef } from "react";
 
-const InputField = ({ label, placeholder,name,onInput }) => {
+const InputField = ({ label, placeholder, name, onInput, icon = true }) => {
   const fieldsetRef = useRef();
   return (
     <fieldset
       ref={fieldsetRef}
       className={`max-w-full [&:has(input.warning)>legend]:text-warning [&:has(input.warning)]:text-warning [&:has(input.warning)]:border-warning [&:has(input.error)>legend]:text-error [&:has(input.error)]:text-error [&:has(input.error)]:border-error text-sm md:text-lg border-[1px] dark:border-text/70 border-text rounded-lg p-2 flex relative justify-end flex-wrap`}
     >
-      <legend className="sm:mx-3 px-1 text-sm dark:text-text/70">{label}</legend>
+      <legend className="sm:mx-3 px-1 text-sm dark:text-text/70">
+        {label}
+      </legend>
+      {icon&&
       <div className="center ">
         <svg
           stroke="currentColor"
@@ -24,15 +27,16 @@ const InputField = ({ label, placeholder,name,onInput }) => {
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
         </svg>
       </div>
+      
+      }
       <input
         onInput={(e) => {
-          onInput(e)
+          onInput(e);
           const reg = new RegExp(/^[+-]?\d+(\.\d+)?$/);
           const value = e.target.value.trim();
-          if(value === ""){
+          if (value === "") {
             e.target.classList.add("warning");
-          }
-          else if (!reg.test(value)) {
+          } else if (!reg.test(value)) {
             e.target.classList.add("error");
           } else {
             e.target.classList.remove("error");

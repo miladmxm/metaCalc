@@ -7,7 +7,7 @@ import InstallPWAbtn from "../components/installPWAbtn";
 const MainLayout = ({ children }) => {
   const {t} = useTranslation()
   const location = useLocation()
-  const isWeekly = location.pathname.includes("weekly")
+  const isWeekly = location.pathname.includes("weekly") || location.pathname.includes("login") 
   return (
     <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative overflow-hidden">
       <InstallPWAbtn/>

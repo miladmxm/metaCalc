@@ -10,6 +10,7 @@ import validation from "../middlewares/validation.js";
 import { loginValidation, registerValidation } from "../validations/admin.js";
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
+import { loginUser, registerUser } from "../controllers/user.js";
 
 const adminAuth = authProvider(true);
 const userAuth = authProvider(false);
@@ -34,6 +35,5 @@ adminRouter.post("/add", adminAuth, addIndex);
 adminRouter.get("/", adminAuth, initAdmin);
 
 
-userRouter.get("/",userAuth,(req,res)=>{
-    res.send("ok")
-})
+userRouter.post("/register",validation(registerValidation),registerUser)
+userRouter.post("/login",validation(loginValidation),loginUser)
