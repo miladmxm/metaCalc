@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { getMain } from "../services/HTTP";
+import { createContext, useEffect, useRef, useState } from "react";
+import { getMain, initUser } from "../services/HTTP";
 
 export const mainContext = createContext({
   Indexes: [],
@@ -9,8 +9,12 @@ export const mainContext = createContext({
 const MianContextProvider = ({ children }) => {
   const [Indexes, setIndexes] = useState([]);
   const [activeIndex, setActiveIndex] = useState({});
+  const [user, setUser] = useState({})
+  console.log(user)
   async function init() {
     const { all } = await getMain();
+    const user = await initUser()
+    setUser(user?.user||{})
     setIndexes(all);
     setActiveIndex(all[0]);
   }
@@ -24,7 +28,7 @@ const MianContextProvider = ({ children }) => {
     init();
   }, []);
   return (
-    <mainContext.Provider value={{ Indexes, activeIndex,setActiveById }}>
+    <mainContext.Provider value={{ Indexes, activeIndex,setActiveById,init,user }}>
       {children}
     </mainContext.Provider>
   );

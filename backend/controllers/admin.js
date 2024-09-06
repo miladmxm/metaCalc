@@ -1,7 +1,7 @@
 import Indexes from "../models/Indexes.js";
 import Admins from "../models/Admin.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 export const registerAdmin = async (req, res) => {
   try {
     const newAdmin = await Admins.create({ ...req.body });
@@ -38,32 +38,33 @@ export const loginAdmin = async (req, res) => {
       return res
         .status(404)
         .json({ message: "username or password is not correct" });
-    const comparePassword =await bcrypt.compare(password, admin.password);
+    const comparePassword = await bcrypt.compare(password, admin.password);
     if (!comparePassword)
       return res
         .status(404)
         .json({ message: "username or password is not correct" });
-    
-    const token = jwt.sign({username:admin.username,id:admin._id},process.env.SECRET_KEY,{ expiresIn: "5d" })
-    console.log(token)
-    res.cookie('jwt', token, {
+
+    const token = jwt.sign(
+      { username: admin.username, id: admin._id },
+      process.env.ADMIN_SECRET_KEY,
+      { expiresIn: "5d" }
+    );
+    res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
-      maxAge: 5 * 24 * 60 * 60 * 1000
-  })
-    res.status(200).send({admin})
-    
+      sameSite: "none",
+      maxAge: 5 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).send({ admin });
   } catch (err) {
     console.log(err);
-
   }
 };
 
-export const initAdmin = async (req,res)=>{
+export const initAdmin = async (req, res) => {
   try {
-    res.send("ok")
+    res.send("ok");
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};

@@ -1,12 +1,17 @@
-const validation= (validateInstance)=>{
-    return (req,res,next)=>{
-        const valid = validateInstance(req.body)
-        if(!valid){
-            res.status(400).json(validateInstance.errors)
-            return;
-        }else{
-            next()
-        }
+import GenerateError from "../utils/generateError.js";
+
+const validation = (validateInstance) => {
+  return (req, res, next) => {
+    try {
+      const valid = validateInstance(req.body);
+      if (!valid) {
+        GenerateError("Validation Error", 400, validateInstance.errors);
+      } else {
+        next();
+      }
+    } catch (err) {
+      next(err);
     }
-}
-export default validation
+  };
+};
+export default validation;

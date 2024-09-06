@@ -162,3 +162,10 @@
     @apply flex items-center justify-center;
   }
 }
+
+
+.swal2-popup {
+  background-color: rgb(var(--baseColor)) !important;
+  color: rgb(var(--text)) !important;
+  font-size: small;
+}

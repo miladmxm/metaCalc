@@ -222,7 +222,7 @@ const Weekly = () => {
           {t("Total income this week: ")}{" "}
           <span className="text-success center rtl:flex-row-reverse">
             {" "}
-            {Income[1] + Income[0]}
+            {(Income[1] * 1000 + Income[0] * 1000) / 1000}
             <svg
               stroke="currentColor"
               fill="none"

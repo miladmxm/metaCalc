@@ -1,22 +1,22 @@
 import jwt from "jsonwebtoken";
 import Users from "../models/User.js";
 import Admins from "../models/Admin.js";
-const UnauthorizedError = (errMessage = "Unauthorized") => {
-  const err = new Error(errMessage);
-  err.status = 401;
-  throw err;
-};
+import GenerateError from "../utils/generateError.js";
+
 const authProvider = (isAdmin) => {
   return async (req, res, next) => {
     try {
       const cookie = req.cookies;
-      if (!cookie || !cookie.jwt) UnauthorizedError();
+      if (!cookie || !cookie.jwt) GenerateError("Unauthorized", 401);
       const refreshToken = cookie.jwt;
       let decoded;
       try {
-        decoded = jwt.verify(refreshToken, process.env.SECRET_KEY);
+        decoded = jwt.verify(
+          refreshToken,
+          isAdmin ? process.env.ADMIN_SECRET_KEY : process.env.USER_SECRET_KEY
+        );
       } catch (err) {
-        UnauthorizedError(err.message);
+        GenerateError(err.message, 401);
       }
       if (decoded) {
         if (isAdmin) {
@@ -39,7 +39,7 @@ const authProvider = (isAdmin) => {
           }
         }
       }
-      UnauthorizedError();
+      GenerateError("Unauthorized", 401);
     } catch (err) {
       next(err);
     }

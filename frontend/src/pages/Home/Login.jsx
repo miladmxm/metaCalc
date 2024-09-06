@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../../services/HTTP";
+import { mainContext } from "../../context/main";
 const Login = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
+  const {init} = useContext(mainContext)
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isSignIn, setIsSignIn] = useState(true);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,9 +20,14 @@ const Login = () => {
   } = useForm();
 
   const onSubmitedForm = async (data) => {
-    const {password,username} = data
-    const res = isSignIn ? await loginUser({username,password}) : await registerUser(data);
-    console.log(res);
+    const { password, username } = data;
+    const res = isSignIn
+      ? await loginUser({ username, password })
+      : await registerUser(data);
+    if (res) {
+      await init()
+      navigate(`/${language}`);
+    }
   };
   return (
     <div className="h-full space-y-5">

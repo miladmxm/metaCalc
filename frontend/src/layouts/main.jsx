@@ -4,14 +4,23 @@ import ThemeSwitch from "../components/ThemeSwitch";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import InstallPWAbtn from "../components/installPWAbtn";
+import { useContext } from "react";
+import { mainContext } from "../context/main";
 const MainLayout = ({ children }) => {
-  const {t} = useTranslation()
-  const location = useLocation()
-  const isWeekly = location.pathname.includes("weekly") || location.pathname.includes("login") 
+  const { t } = useTranslation();
+  const location = useLocation();
+  const { user } = useContext(mainContext);
+  const isWeekly =
+    location.pathname.includes("weekly") || location.pathname.includes("login");
   return (
     <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative overflow-hidden">
-      <InstallPWAbtn/>
-      <header dir="ltr" className={`flex items-center justify-between transition-all duration-300 ${isWeekly?"h-10":"h-20"} `}>
+      <InstallPWAbtn />
+      <header
+        dir="ltr"
+        className={`flex items-center justify-between transition-all duration-300 ${
+          isWeekly ? "h-10" : "h-20"
+        } `}
+      >
         <div className="flex-1 justify-start flex">
           <LanguageSwitch className="flex-1" />
         </div>
@@ -27,7 +36,12 @@ const MainLayout = ({ children }) => {
         <nav>
           <ul className="flex justify-between items-center [&>li]:w-1/3">
             <li>
-              <NavLink to={"weekly"} className={"opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "}>
+              <NavLink
+                to={"weekly"}
+                className={
+                  "opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "
+                }
+              >
                 <svg
                   stroke="currentColor"
                   fill="currentColor"
@@ -41,7 +55,13 @@ const MainLayout = ({ children }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink end to={""} className={"opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "}>
+              <NavLink
+                end
+                to={""}
+                className={
+                  "opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "
+                }
+              >
                 <svg
                   stroke="currentColor"
                   fill="currentColor"
@@ -55,18 +75,46 @@ const MainLayout = ({ children }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"login"} className={"opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "}>
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 512 512"
-                  xmlns="http://www.w3.org/2000/svg"
+              {user.username ? (
+                <NavLink
+                  to={"dashboard"}
+                  className={
+                    "opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "
+                  }
                 >
-                  <path d="M218.1 167.2c0 13 0 25.6 4.1 37.4-43.1 50.6-167.5 194.5-167.5 194.5l2.9 36.3s34.8 33 40 28c15.4-15 24.8-25.2 24.8-25.2l7.24-43.35 47.11-3.47 3.78-46.8 49.63-.95.49-50.09 52.69 2.1 9-18.84c15.5 6.7 29.6 9.4 47.7 9.4 68.5 0 124-53.4 124-119.2S408.5 48 340 48s-121.9 53.4-121.9 119.2zM406.85 144A38.85 38.85 0 1 1 368 105.15 38.81 38.81 0 0 1 406.85 144z"></path>
-                </svg>
-                <small className="hidden sm:center">{t("Sign-in/up")}</small>
-              </NavLink>
+                  <svg
+                    stroke="currentColor"
+                    fill="none"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="12" cy="8" r="5"></circle>
+                    <path d="M20 21a8 8 0 1 0-16 0"></path>
+                  </svg>
+                  <small className="hidden sm:center">{t("Dashboard")}</small>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={"login"}
+                  className={
+                    "opacity-45 transition-all duration-300 [&.active]:opacity-100 dark:[&.active]:text-primary [&.active]:text-white p-2 center gap-1 h-10 [&>svg]:h-full "
+                  }
+                >
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M218.1 167.2c0 13 0 25.6 4.1 37.4-43.1 50.6-167.5 194.5-167.5 194.5l2.9 36.3s34.8 33 40 28c15.4-15 24.8-25.2 24.8-25.2l7.24-43.35 47.11-3.47 3.78-46.8 49.63-.95.49-50.09 52.69 2.1 9-18.84c15.5 6.7 29.6 9.4 47.7 9.4 68.5 0 124-53.4 124-119.2S408.5 48 340 48s-121.9 53.4-121.9 119.2zM406.85 144A38.85 38.85 0 1 1 368 105.15 38.81 38.81 0 0 1 406.85 144z"></path>
+                  </svg>
+                  <small className="hidden sm:center">{t("Sign-in/up")}</small>
+                </NavLink>
+              )}
             </li>
           </ul>
         </nav>

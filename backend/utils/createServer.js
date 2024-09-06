@@ -7,13 +7,12 @@ import errorHandler from "../middlewares/errorHandler.js";
 
 const createServer = () => {
   const app = express();
-  app.use(cookieParser());
   app.use(express.static(join(process.cwd(), "public")));
-
-  app.use(cors());
-
+  app.use(cookieParser());
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
+  app.use(cors({ credentials: true, origin: "http://localhost:5173", methods: ["GET", "POST"] }));
   app.use("/user", userRouter);
   app.use("/admin", adminRouter);
   app.use("/api", mainRouter);
@@ -23,4 +22,4 @@ const createServer = () => {
   });
   return app;
 };
-export default createServer
+export default createServer;
