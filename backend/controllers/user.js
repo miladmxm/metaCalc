@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import Users from "../models/User.js";
 import GenerateError from "../utils/generateError.js";
+import Weeks from "../models/Weekly.js";
 
 export const initUser = async (req, res, next) => {
   try {
@@ -11,6 +12,26 @@ export const initUser = async (req, res, next) => {
     next(err);
   }
 };
+
+
+export const saveDay = async(req,res,next)=>{
+  try {
+    await Weeks.findOne({
+      
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getCurrentWeekly = async (req,res,next)=>{
+  try {
+    
+    
+  } catch (err) {
+    
+  }
+}
 
 const setToken = (res, username, id) => {
   try {

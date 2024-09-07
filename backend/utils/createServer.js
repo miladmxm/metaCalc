@@ -8,6 +8,7 @@ import errorHandler from "../middlewares/errorHandler.js";
 const createServer = () => {
   const app = express();
   app.use(express.static(join(process.cwd(), "public")));
+  
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());

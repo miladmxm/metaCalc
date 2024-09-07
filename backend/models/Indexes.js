@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const IndexesSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true
+        required:true,
+        uppercase:true
     },
     serviceCharge:{
         type:Number,
