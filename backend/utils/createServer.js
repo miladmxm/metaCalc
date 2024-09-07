@@ -12,11 +12,13 @@ const createServer = () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(cors({ credentials: true, origin: "http://localhost:5173", methods: ["GET", "POST"] }));
+  app.use(cors({ credentials: true, origin: "http://localhost:5173", methods: ["GET", "POST", "DELETE", "PUT"] }));
+  
   app.use("/user", userRouter);
   app.use("/admin", adminRouter);
   app.use("/api", mainRouter);
   app.use(errorHandler);
+
   app.use("*", (req, res) => {
     res.sendFile(join(process.cwd(), "public", "index.html"));
   });

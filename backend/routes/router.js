@@ -6,8 +6,14 @@ import {
   loginAdmin,
   registerAdmin,
 } from "../controllers/admin.js";
+
+
+
 import validation from "../middlewares/validation.js";
+
+
 import { loginValidation, registerValidation } from "../validations/admin.js";
+
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
 import { initUser, loginUser, logout, registerUser } from "../controllers/user.js";
@@ -19,7 +25,7 @@ export const mainRouter = new Router();
 export const adminRouter = new Router();
 export const userRouter = new Router();
 
-// /
+// /api
 mainRouter.get("/", getAll);
 mainRouter.get("/locales/:lang/*",locales)
 

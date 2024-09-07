@@ -3,6 +3,7 @@ import Users from "../models/User.js";
 import Admins from "../models/Admin.js";
 import GenerateError from "../utils/generateError.js";
 
+
 const authProvider = (isAdmin) => {
   return async (req, res, next) => {
     try {

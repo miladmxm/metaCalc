@@ -28,6 +28,7 @@ const setToken = (res, username, id) => {
     GenerateError("serverError", 500);
   }
 };
+
 export const logout = async (req, res, next) => {
   try {
     res.clearCookie("jwt")

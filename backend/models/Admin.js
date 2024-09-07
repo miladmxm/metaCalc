@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs'
+
 const AdminSchema = new mongoose.Schema({
     username:{
         type:String,
@@ -14,6 +15,7 @@ const AdminSchema = new mongoose.Schema({
         required:true
     },
 },{timestamps:true})
+
 
 AdminSchema.pre("save",function(next){
     const admin =this

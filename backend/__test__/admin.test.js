@@ -14,6 +14,7 @@ describe("admin",()=>{
     })
 
     describe("first register route",()=>{
+
         describe("should be register",()=>{
             it("should return 400 for validation",async()=>{
                 await supertest(app).post("/admin/first").send({username:"mialdmxm",password:"1234"}).expect(400)
