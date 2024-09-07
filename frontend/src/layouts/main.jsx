@@ -34,7 +34,7 @@ const MainLayout = ({ children }) => {
       <section className="flex-auto max-h-[83%]">{children}</section>
       <footer className="dark:bg-primary/10 bg-primary/60 rounded-lg absolute bottom-5 left-3 right-3 md:left-8 md:right-8">
         <nav>
-          <ul className="flex justify-between items-center [&>li]:w-1/3">
+          <ul className="flex justify-between items-center [&>li]:w-1/3 [&_small]:leading-[0]">
             <li>
               <NavLink
                 to={"weekly"}

@@ -5,6 +5,7 @@ import MainIndex from "../pages/Home";
 import Home from "../pages/Home/home";
 import Weekly from "../pages/Home/weekly";
 import Login from "../pages/Home/Login";
+import UserDashboard from "../pages/Home/userDashboard";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
           {
             path:"login",
             element:<Login/>
+          },
+          {
+            path:"dashboard",
+            element:<UserDashboard/>
           }
         ]
       },

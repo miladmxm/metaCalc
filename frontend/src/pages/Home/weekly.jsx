@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
 import { useRef, useState } from "react";
+import AuthUser from "../../HOC/authUser";
 
 const Weekly = () => {
   const { t } = useTranslation();
@@ -244,4 +245,4 @@ const Weekly = () => {
   );
 };
 
-export default Weekly;
+export default AuthUser(Weekly);

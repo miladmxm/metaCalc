@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll } from "../controllers/indexes.js";
+import { getAll, locales } from "../controllers/api.js";
 import {
   addIndex,
   initAdmin,
@@ -10,7 +10,7 @@ import validation from "../middlewares/validation.js";
 import { loginValidation, registerValidation } from "../validations/admin.js";
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
-import { initUser, loginUser, registerUser } from "../controllers/user.js";
+import { initUser, loginUser, logout, registerUser } from "../controllers/user.js";
 
 const adminAuth = authProvider(true);
 const userAuth = authProvider(false);
@@ -21,6 +21,7 @@ export const userRouter = new Router();
 
 // /
 mainRouter.get("/", getAll);
+mainRouter.get("/locales/:lang/*",locales)
 
 // /admin
 adminRouter.post("/register", validation(registerValidation), registerAdmin);
@@ -37,4 +38,5 @@ adminRouter.get("/", adminAuth, initAdmin);
 
 userRouter.post("/register",validation(registerValidation),registerUser)
 userRouter.post("/login",validation(loginValidation),loginUser)
+userRouter.get("/logout",userAuth,logout)
 userRouter.get("/",userAuth,initUser)

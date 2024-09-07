@@ -10,10 +10,12 @@ i18n.use(HttpBackend)
   lng: "en",
   keySeparator: false,
   backend:{
-    loadPath:'/locales/{{lng}}/{{ns}}.json'
+    // loadPath:'/locales/{{lng}}/{{ns}}.json'
+    loadPath:import.meta.env.VITE_API_META_URL+"/api/locales/{{lng}}/{{ns}}.json"
   },
   interpolation: {
     escapeValue: false,
   },
 });
 export default i18n;
+console.log(import.meta.env.VITE_API_META_URL+"/locales/{{lng}}/{{ns}}.json")

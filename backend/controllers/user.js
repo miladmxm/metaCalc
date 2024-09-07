@@ -5,9 +5,8 @@ import GenerateError from "../utils/generateError.js";
 
 export const initUser = async (req, res, next) => {
   try {
-    const user = await Users.findById(req.user_id,'username email');
-    console.log(user)
-    res.status(200).json({user:user})
+    const user = await Users.findById(req.user_id, 'username email');
+    res.status(200).json({ user: user })
   } catch (err) {
     next(err);
   }
@@ -29,7 +28,15 @@ const setToken = (res, username, id) => {
     GenerateError("serverError", 500);
   }
 };
-
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("jwt")
+    console.log(res.cookies)
+    res.status(200).json({ message: "loged out" })
+  } catch (err) {
+    next(err)
+  }
+}
 export const registerUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -47,10 +54,10 @@ export const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await Users.findOne({ username });
-    if (!user) GenerateError("username or password is not correct", 404);
+    if (!user) GenerateError("username or password is incorrect", 404);
     const comparePassword = await bcrypt.compare(password, user.password);
     if (!comparePassword)
-      GenerateError("username or password is not correct", 404);
+      GenerateError("username or password is incorrect", 404);
     setToken(res, username, user._id);
     res.status(200).json({ message: "You successfully logged in." });
   } catch (err) {

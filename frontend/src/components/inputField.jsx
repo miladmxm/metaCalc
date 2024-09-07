@@ -47,7 +47,7 @@ const InputField = ({ label, placeholder, name, onInput, icon = true }) => {
         name={name}
         placeholder={placeholder}
         type="number"
-        className="border-none w-[90%] max-w-[95%] flex-auto !bg-transparent outline-none placeholder:text-sm"
+        className="border-none w-[90%] max-w-[95%] flex-auto !bg-transparent outline-none placeholder:text-sm "
       />
     </fieldset>
   );

@@ -8,14 +8,17 @@ const http = axios.create({
     Accept: "*",
     "Content-Type": "application/json",
   },
+  params:{
+    lang:location.pathname.slice(1).split("/")[0]
+  }
 });
 
-function axiosResponse(res){
+function axiosResponse(res) {
   return res.data;
 }
 
 axios.interceptors.response.use(axiosResponse);
-http.interceptors.response.use(axiosResponse,function (error) {
+http.interceptors.response.use(axiosResponse, function (error) {
   if (error) {
     Toast(error.response.data.message, "error");
   }
@@ -39,6 +42,13 @@ export const registerUser = async (body) => {
 export const loginUser = async (body) => {
   try {
     return await http.post("/user/login", body);
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const logoutUser = async () => {
+  try {
+    return await http.get("/user/logout");
   } catch (err) {
     console.log(err);
   }
