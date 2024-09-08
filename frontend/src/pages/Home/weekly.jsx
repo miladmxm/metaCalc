@@ -1,18 +1,20 @@
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
 import { getcurrentweek, saveDayes } from "../../services/HTTP";
+import { mainContext } from "../../context/main";
 
 const Weekly = () => {
   const { t } = useTranslation();
   const [Income, setIncome] = useState([]);
+  const { setHttpLoading } = useContext(mainContext);
   const resultRef = useRef();
-  const [dayes, setDayesuseState] = useState({})
-  const [weekId,setWeekId] = useState("")
-  const handleFormSubmit = async(e) => {
+  const [dayes, setDayesuseState] = useState({});
+  const [weekId, setWeekId] = useState("");
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const newDayes = { ...dayes }
+    const newDayes = { ...dayes };
     const {
       MondayProfit,
       TuesdayProfit,
@@ -43,26 +45,27 @@ const Weekly = () => {
       profitIncome = 0;
 
     function forEachElement(el, isCommission) {
-
       const reg = new RegExp(/^[+-]?\d+(\.\d+)?$/);
       const value = el.value;
       if (!reg.test(value)) {
         el.classList.add("warning");
       } else {
-        console.log(el.dataset.mainName)
+        console.log(el.dataset.mainName);
         if (isCommission) {
-
-          newDayes[el.dataset.mainName].commission = Number(value)
-          commissionIncome = (commissionIncome * 1000 + Number(value) * 1000) / 1000;
+          newDayes[el.dataset.mainName].commission = Number(value);
+          commissionIncome =
+            (commissionIncome * 1000 + Number(value) * 1000) / 1000;
         } else {
-          newDayes[el.dataset.mainName].profit = Number(value)
+          newDayes[el.dataset.mainName].profit = Number(value);
           profitIncome = (profitIncome * 1000 + Number(value) * 1000) / 1000;
         }
       }
     }
-    ProfitFields.forEach((e) => forEachElement(e, false))
-    CommissionFields.forEach(e => forEachElement(e, true));
-    const res = await saveDayes({dayes:newDayes},weekId)
+    ProfitFields.forEach((e) => forEachElement(e, false));
+    CommissionFields.forEach((e) => forEachElement(e, true));
+    setHttpLoading(true)
+    await saveDayes({ dayes: newDayes }, weekId);
+    setHttpLoading(false)
     setIncome([profitIncome, commissionIncome]);
     resultRef.current.classList.add("active");
   };
@@ -72,14 +75,19 @@ const Weekly = () => {
   };
   useEffect(() => {
     async function init() {
-      const data = await getcurrentweek()
+      setHttpLoading(true);
+      const data = await getcurrentweek();
+      setHttpLoading(false);
       if (data.week) {
-        setWeekId(data.week._id)
-        setDayesuseState(data.week.dayes)
+        setWeekId(data.week._id);
+        setDayesuseState(data.week.dayes);
       }
     }
-    init()
-  }, [])
+    init();
+    return () => {
+      setHttpLoading(false);
+    };
+  }, []);
   return (
     <div className="h-full space-y-5 overflow-auto scrollbar pr-1 rtl:pl-1">
       <h2>{t("Weekly income")}</h2>

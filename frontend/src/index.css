@@ -182,7 +182,7 @@
   border-radius: 50%;
   width: 15svw;
   height: 15svw;
-  color: #fff;
+  color: rgb(var(--text));
 }
   .loader:before,
   .loader:after {
@@ -198,7 +198,7 @@
     animation: 1s spin linear infinite;
   }
   .loader:after {
-    color: #FF3D00;
+    color:rgb(var(--primary));
     transform: rotateY(70deg);
     animation-delay: .4s;
   }

@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <div className='fixed inset-0 bg-primary/10 backdrop-blur-sm center'>
+    <div className='fixed inset-0 z-50 bg-primary/5 backdrop-blur-sm center'>
         <span className="loader"></span>
     </div>
   )

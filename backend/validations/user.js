@@ -1,44 +1,26 @@
-import ajv from "./ajvInstance.js"
-
+import ajv from "./ajvInstance.js";
+const dayTypes = {
+  type: "object",
+  properties: {
+    profit: { type: "number", format: "float" },
+    commission: { type: "number", format: "float" },
+  },
+};
 const weekUpdateSchema = {
-    type: 'object',
-    properties: {
-        dayes: {
-            type: "object", properties: {
-                mon: {
-                    type: "object",
-                    properties: {
-                        profit: { type: "float" }, commission: { type: "float" }
-                    }
-                },
-                tue: {
-                    type: "object",
-                    properties: {
-                        profit: { type: "float" }, commission: { type: "float" }
-                    }
-                },
-                wed: {
-                    type: "object",
-                    properties: {
-                        profit: { type: "float" }, commission: { type: "float" }
-                    }
-                },
-                thu: {
-                    type: "object",
-                    properties: {
-                        profit: { type: "float" }, commission: { type: "float" }
-                    }
-                },
-                fri: {
-                    type: "object",
-                    properties: {
-                        profit: { type: "float" }, commission: { type: "float" }
-                    }
-                }
-            }
-        }
+  type: "object",
+  properties: {
+    dayes: {
+      type: "object",
+      properties: {
+        mon: dayTypes,
+        mon: dayTypes,
+        mon: dayTypes,
+        mon: dayTypes,
+        mon: dayTypes,
+      },
     },
-    required: ["dayes"],
-    additionalProperties: false
-}
-export const weekUpdateValidation = ajv.compile(weekUpdateSchema)
+  },
+  required: ["dayes"],
+  additionalProperties: false,
+};
+export const weekUpdateValidation = ajv.compile(weekUpdateSchema);
