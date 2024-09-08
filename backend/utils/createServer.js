@@ -13,7 +13,7 @@ const createServer = () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(cors({ credentials: true, origin: "http://localhost:5173", methods: ["GET", "POST", "DELETE", "PUT"] }));
+  app.use(cors({ credentials: true, origin: process.env.FRONTEND, methods: ["GET", "POST", "DELETE", "PUT"] }));
   
   app.use("/user", userRouter);
   app.use("/admin", adminRouter);

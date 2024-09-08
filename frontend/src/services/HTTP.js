@@ -49,7 +49,7 @@ export const loginUser = async (body) => {
 export const logoutUser = async () => {
   try {
     return await http.get("/user/logout");
-  } catch (err) {
+  } catch (err) { 
     console.log(err);
   }
 };
@@ -61,3 +61,19 @@ export const initUser = async () => {
     console.log(err);
   }
 };
+export const getcurrentweek = async () => {
+  try {
+    return await axios.get("/user/getcurrentweek/");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const saveDayes = async (body,weekId) => {
+  try {
+    return await axios.post(`/user/savedayes/${weekId}`,body);
+  } catch (err) {
+    console.log(err);
+  }
+};
+

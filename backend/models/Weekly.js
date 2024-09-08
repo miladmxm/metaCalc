@@ -13,14 +13,12 @@ const dayesType = {
 const WeeklySchema = Schema(
   {
     from: Date,
-    to: Date,
+    end: Date,
     user: {
       ref: "Users",
       type: Schema.Types.ObjectId,
     },
-    weekInYear: Number,
     dayes: {
-      type: Object,
       mon: dayesType,
       tue: dayesType,
       wed: dayesType,

@@ -1,14 +1,18 @@
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
+import { getcurrentweek, saveDayes } from "../../services/HTTP";
 
 const Weekly = () => {
   const { t } = useTranslation();
   const [Income, setIncome] = useState([]);
   const resultRef = useRef();
-  const handleFormSubmit = (e) => {
+  const [dayes, setDayesuseState] = useState({})
+  const [weekId,setWeekId] = useState("")
+  const handleFormSubmit = async(e) => {
     e.preventDefault();
+    const newDayes = { ...dayes }
     const {
       MondayProfit,
       TuesdayProfit,
@@ -37,25 +41,28 @@ const Weekly = () => {
     ];
     let commissionIncome = 0,
       profitIncome = 0;
-    ProfitFields.forEach((el) => {
+
+    function forEachElement(el, isCommission) {
+
       const reg = new RegExp(/^[+-]?\d+(\.\d+)?$/);
       const value = el.value;
       if (!reg.test(value)) {
         el.classList.add("warning");
       } else {
-        profitIncome = (profitIncome * 1000 + Number(value) * 1000) / 1000;
+        console.log(el.dataset.mainName)
+        if (isCommission) {
+
+          newDayes[el.dataset.mainName].commission = Number(value)
+          commissionIncome = (commissionIncome * 1000 + Number(value) * 1000) / 1000;
+        } else {
+          newDayes[el.dataset.mainName].profit = Number(value)
+          profitIncome = (profitIncome * 1000 + Number(value) * 1000) / 1000;
+        }
       }
-    });
-    CommissionFields.forEach((el) => {
-      const reg = new RegExp(/^[+-]?\d+(\.\d+)?$/);
-      const value = el.value;
-      if (!reg.test(value)) {
-        el.classList.add("warning");
-      } else {
-        commissionIncome =
-          (commissionIncome * 1000 + Number(value) * 1000) / 1000;
-      }
-    });
+    }
+    ProfitFields.forEach((e) => forEachElement(e, false))
+    CommissionFields.forEach(e => forEachElement(e, true));
+    const res = await saveDayes({dayes:newDayes},weekId)
     setIncome([profitIncome, commissionIncome]);
     resultRef.current.classList.add("active");
   };
@@ -63,6 +70,16 @@ const Weekly = () => {
     if (resultRef.current.classList.contains("active"))
       resultRef.current.classList.remove("active");
   };
+  useEffect(() => {
+    async function init() {
+      const data = await getcurrentweek()
+      if (data.week) {
+        setWeekId(data.week._id)
+        setDayesuseState(data.week.dayes)
+      }
+    }
+    init()
+  }, [])
   return (
     <div className="h-full space-y-5 overflow-auto scrollbar pr-1 rtl:pl-1">
       <h2>{t("Weekly income")}</h2>
@@ -70,63 +87,83 @@ const Weekly = () => {
         <div className="flex gap-5">
           <div className="w-1/2 space-y-2">
             <InputField
+              defaultValue={dayes.mon?.profit}
               onInput={handleChangeInput}
               label={t("Mon profit")}
+              mainName={"mon"}
               placeholder={t("100.112 OR -100.112")}
               name="MondayProfit"
             />
             <InputField
+              defaultValue={dayes.tue?.profit}
               onInput={handleChangeInput}
               label={t("Tue profit")}
+              mainName={"tue"}
               placeholder={t("100.112 OR -100.112")}
               name="TuesdayProfit"
             />
             <InputField
+              defaultValue={dayes.wed?.profit}
               onInput={handleChangeInput}
               label={t("Wed profit")}
+              mainName={"wed"}
               placeholder={t("100.112 OR -100.112")}
               name="WednesdayProfit"
             />
             <InputField
+              defaultValue={dayes.thu?.profit}
               onInput={handleChangeInput}
               label={t("Thu profit")}
               placeholder={t("100.112 OR -100.112")}
+              mainName={"thu"}
               name="ThursdayProfit"
             />
             <InputField
+              defaultValue={dayes.fri?.profit}
               onInput={handleChangeInput}
               label={t("Fri profit")}
               placeholder={t("100.112 OR -100.112")}
+              mainName={"fri"}
               name="FridayProfit"
             />
           </div>
           <div className="w-1/2 space-y-2">
             <InputField
+              defaultValue={dayes.mon?.commission}
               onInput={handleChangeInput}
+              mainName={"mon"}
               label={t("Mon commission")}
               placeholder={t("100.112 OR -100.112")}
               name="MondayCommission"
             />
             <InputField
+              defaultValue={dayes.tue?.commission}
               onInput={handleChangeInput}
               label={t("Tue commission")}
+              mainName={"tue"}
               placeholder={t("100.112 OR -100.112")}
               name="TuesdayCommission"
             />
             <InputField
+              defaultValue={dayes.wed?.commission}
               onInput={handleChangeInput}
+              mainName={"wed"}
               label={t("Wed commission")}
               placeholder={t("100.112 OR -100.112")}
               name="WednesdayCommission"
             />
             <InputField
+              defaultValue={dayes.thu?.commission}
               onInput={handleChangeInput}
+              mainName={"thu"}
               label={t("Thu commission")}
               placeholder={t("100.112 OR -100.112")}
               name="ThursdayCommission"
             />
             <InputField
+              defaultValue={dayes.fri?.commission}
               onInput={handleChangeInput}
+              mainName={"fri"}
               label={t("Fri commission")}
               placeholder={t("100.112 OR -100.112")}
               name="FridayCommission"

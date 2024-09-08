@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import Users from "../models/User.js";
 import GenerateError from "../utils/generateError.js";
 import Weeks from "../models/Weekly.js";
+import getCurrentWeek from "../utils/week.js";
 
 export const initUser = async (req, res, next) => {
   try {
@@ -14,22 +15,44 @@ export const initUser = async (req, res, next) => {
 };
 
 
-export const saveDay = async(req,res,next)=>{
+export const saveDayes = async (req, res, next) => {
   try {
-    await Weeks.findOne({
-      
+    console.log(req.body.dayes)
+    const updatedWeek = await Weeks.findOneAndUpdate({
+      _id: req.params.id,
+      user: req.user_id
+    }, {
+      dayes: req.body.dayes
+    }, {
+      new: true
     })
+    if(!updatedWeek) GenerateError("not found",404)
+    res.status(200).json({week:updatedWeek})
   } catch (err) {
     next(err)
   }
 }
 
-export const getCurrentWeekly = async (req,res,next)=>{
+export const getCurrentWeekly = async (req, res, next) => {
   try {
-    
-    
+    const [startWeek, endWeek] = getCurrentWeek()
+    let userWeek = await Weeks.findOne({
+      from: startWeek,
+      end: endWeek,
+      user: req.user_id
+    })
+    res.status(200)
+    if (!userWeek) {
+      userWeek = await Weeks.create({
+        from: startWeek,
+        end: endWeek,
+        user: req.user_id
+      })
+      res.status(201)
+    }
+    res.json({ week: userWeek })
   } catch (err) {
-    
+    next(err)
   }
 }
 

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const InputField = ({ label, placeholder, name, onInput, icon = true }) => {
+const InputField = ({ label, placeholder, name, onInput, icon = true, defaultValue, mainName }) => {
   const fieldsetRef = useRef();
   return (
     <fieldset
@@ -10,26 +10,28 @@ const InputField = ({ label, placeholder, name, onInput, icon = true }) => {
       <legend className="sm:mx-3 px-1 text-sm dark:text-text/70">
         {label}
       </legend>
-      {icon&&
-      <div className="center ">
-        <svg
-          stroke="currentColor"
-          fill="none"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          height="1em"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-        </svg>
-      </div>
-      
+      {icon &&
+        <div className="center ">
+          <svg
+            stroke="currentColor"
+            fill="none"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+
       }
       <input
+        data-main-name={mainName}
+        defaultValue={defaultValue && defaultValue !== 0 ? defaultValue:""}
         onInput={(e) => {
           onInput(e);
           const reg = new RegExp(/^[+-]?\d+(\.\d+)?$/);

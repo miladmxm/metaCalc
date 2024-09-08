@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       manifest: {
         name: "Meta Calculator",
         short_name: "MetaCalc",

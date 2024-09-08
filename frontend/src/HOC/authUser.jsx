@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
 import { mainContext } from '../context/main'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 const AuthUser = (WrappedComponent) => {
   return (props) => {
+    const {pathname} = useLocation()
     const { user } = useContext(mainContext)
     if (user && user.username) {
       return (
@@ -11,7 +12,7 @@ const AuthUser = (WrappedComponent) => {
       )
     } else {
       return (
-        <Navigate to={"../login"} />
+        <Navigate to={"../login"} state={{from:pathname}}/>
       )
     }
   }
