@@ -38,5 +38,6 @@
   "Dashboard":"داشبورد",
   "From":"تاریخ شروع",
   "To":"تاریخ پایان",
-  "logout":"خروج"
+  "logout":"خروج",
+  "No week has been registered for a week!":"تا الان هیچ هفته ای ثبت نشده است!"
 }

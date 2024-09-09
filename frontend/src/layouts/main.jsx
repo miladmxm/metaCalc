@@ -11,7 +11,7 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const { user } = useContext(mainContext);
   const isWeekly =
-    location.pathname.includes("weekly") || location.pathname.includes("login");
+    location.pathname.includes("weekly") || location.pathname.includes("login") || location.pathname.includes("dashboard") ;
   return (
     <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative overflow-hidden">
       <InstallPWAbtn />

@@ -5,6 +5,7 @@ import { mainContext } from '../../context/main'
 import { useTranslation } from 'react-i18next'
 import sum from '../../utils/sum'
 import NumberWithDollar from '../../components/numberWithDollar'
+import { Link } from 'react-router-dom'
 
 
 const UserDashboard = () => {
@@ -34,11 +35,19 @@ const UserDashboard = () => {
     ]
   }, [])
   return (
-    <div>
+    <div className="h-full max-h-[75svh]">
       <button className='ml-0 mr-auto block my-2 bg-error/10 w-fit px-4 rounded-lg py-2 ' onClick={logout}>
         {t("logout")}
       </button>
-      <div className='max-h-full overflow-auto space-y-5'>
+      <div className='max-h-full pr-1 rtl:pl-1 overflow-auto scrollbar space-y-5'>
+        {weeks.length>0&&
+        <>
+          <h3 className='center text-2xl font-bold'>
+            {t("No week has been registered for a week!")}
+          </h3>
+          <Link to={"../weekly"}></Link>
+        </>
+        }
         {weeks.map(week => (
           <div className='flex gap-3 flex-col cursor-pointer' key={week._id}>
             <div className='dark:bg-primary/10 bg-gray-700 text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2'>
