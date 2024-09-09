@@ -4,7 +4,8 @@ import Users from "../models/User.js";
 import GenerateError from "../utils/generateError.js";
 import Weeks from "../models/Weekly.js";
 import getCurrentWeek from "../utils/week.js";
-
+import sum from "../../frontend/src/utils/sum.js";
+import t from '../utils/t.js'
 export const initUser = async (req, res, next) => {
   try {
     const user = await Users.findById(req.user_id, 'username email');
@@ -14,10 +15,38 @@ export const initUser = async (req, res, next) => {
   }
 };
 
+export const getAllWeek = async (req, res, next) => {
+  try {
+    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes")
+
+    const updatedWeeks = weeks.map(week => {
+      let weekObj = week.toObject();
+      let commission = 0;
+      let profit = 0;
+
+      Object.values(weekObj.dayes).forEach(val => {
+
+        commission = sum(commission, val.commission);
+        profit = sum(profit, val.profit);
+      });
+
+
+      weekObj.profit = profit;
+      weekObj.commission = commission;
+
+      return weekObj;
+    });
+
+
+    res.status(200).json({ weeks: updatedWeeks })
+  } catch (err) {
+    console.log(err)
+    next(err)
+  }
+}
 
 export const saveDayes = async (req, res, next) => {
   try {
-    console.log(req.body.dayes)
     const updatedWeek = await Weeks.findOneAndUpdate({
       _id: req.params.id,
       user: req.user_id
@@ -26,8 +55,8 @@ export const saveDayes = async (req, res, next) => {
     }, {
       new: true
     })
-    if(!updatedWeek) GenerateError("not found",404)
-    res.status(200).json({week:updatedWeek})
+    if (!updatedWeek) GenerateError(await t("not found", req.lang), 404)
+    res.status(200).json({ week: updatedWeek })
   } catch (err) {
     next(err)
   }
@@ -38,14 +67,14 @@ export const getCurrentWeekly = async (req, res, next) => {
     const [startWeek, endWeek] = getCurrentWeek()
     let userWeek = await Weeks.findOne({
       from: startWeek,
-      end: endWeek,
+      to: endWeek,
       user: req.user_id
     })
     res.status(200)
     if (!userWeek) {
       userWeek = await Weeks.create({
         from: startWeek,
-        end: endWeek,
+        to: endWeek,
         user: req.user_id
       })
       res.status(201)

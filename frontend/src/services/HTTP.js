@@ -8,8 +8,8 @@ const http = axios.create({
     Accept: "*",
     "Content-Type": "application/json",
   },
-  params:{
-    lang:location.pathname.slice(1).split("/")[0]
+  params: {
+    lang: location.pathname.slice(1).split("/")[0]
   }
 });
 
@@ -49,7 +49,7 @@ export const loginUser = async (body) => {
 export const logoutUser = async () => {
   try {
     return await http.get("/user/logout");
-  } catch (err) { 
+  } catch (err) {
     console.log(err);
   }
 };
@@ -69,9 +69,18 @@ export const getcurrentweek = async () => {
   }
 };
 
-export const saveDayes = async (body,weekId) => {
+export const saveDayes = async (body, weekId) => {
   try {
-    return await axios.post(`/user/savedayes/${weekId}`,body);
+    return await axios.post(`/user/savedayes/${weekId}`, body);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const getAllWeek = async () => {
+  try {
+    return await axios.get(`/user/weeks/`);
   } catch (err) {
     console.log(err);
   }

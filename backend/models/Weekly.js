@@ -13,7 +13,7 @@ const dayesType = {
 const WeeklySchema = Schema(
   {
     from: Date,
-    end: Date,
+    to: Date,
     user: {
       ref: "Users",
       type: Schema.Types.ObjectId,
@@ -24,7 +24,7 @@ const WeeklySchema = Schema(
       wed: dayesType,
       thu: dayesType,
       fri: dayesType,
-    },
+    }
   },
   { timestamps: true }
 );

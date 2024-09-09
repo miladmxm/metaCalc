@@ -6,6 +6,9 @@ export const mainContext = createContext({
   Indexes: [],
   activeIndex: {},
   setActiveById: () => {},
+  setHttpLoading: () => {},
+  clearUser: () => {},
+  init: () => {},
 });
 const MianContextProvider = ({ children }) => {
   const [Indexes, setIndexes] = useState([]);

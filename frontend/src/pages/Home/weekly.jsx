@@ -4,6 +4,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
 import { getcurrentweek, saveDayes } from "../../services/HTTP";
 import { mainContext } from "../../context/main";
+import sum from "../../utils/sum";
+import NumberWithDollar from "../../components/numberWithDollar";
 
 const Weekly = () => {
   const { t } = useTranslation();
@@ -53,11 +55,10 @@ const Weekly = () => {
         console.log(el.dataset.mainName);
         if (isCommission) {
           newDayes[el.dataset.mainName].commission = Number(value);
-          commissionIncome =
-            (commissionIncome * 1000 + Number(value) * 1000) / 1000;
+          commissionIncome = sum(commissionIncome, Number(value))
         } else {
           newDayes[el.dataset.mainName].profit = Number(value);
-          profitIncome = (profitIncome * 1000 + Number(value) * 1000) / 1000;
+          profitIncome = sum(profitIncome, Number(value));
         }
       }
     }
@@ -212,24 +213,8 @@ const Weekly = () => {
           dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center"
         >
           {t("Total profits: ")}{" "}
-          <span className="text-success center rtl:flex-row-reverse">
-            {" "}
-            {Income[0]}
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </span>
+          <NumberWithDollar number={Income[0]} />
+
         </div>
         <div
           className="sm:w-[calc(50%-0.5rem)] w-5/6 dark:bg-primary/5 
@@ -239,24 +224,7 @@ const Weekly = () => {
           dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center"
         >
           {t("Total commission: ")}{" "}
-          <span className="text-success center rtl:flex-row-reverse">
-            {" "}
-            {Income[1]}
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </span>
+          <NumberWithDollar number={Income[1]} />
         </div>
         <div
           className="sm:w-full w-5/6 dark:bg-primary/5 
@@ -266,24 +234,7 @@ const Weekly = () => {
           dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center"
         >
           {t("Total income this week: ")}{" "}
-          <span className="text-success center rtl:flex-row-reverse">
-            {" "}
-            {(Income[1] * 1000 + Income[0] * 1000) / 1000}
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </span>
+          <NumberWithDollar number={sum(Income[1], Income[0])} />
         </div>
       </div>
     </div>

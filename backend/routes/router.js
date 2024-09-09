@@ -17,7 +17,7 @@ import { weekUpdateValidation } from "../validations/user.js";
 
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
-import { getCurrentWeekly, initUser, loginUser, logout, registerUser, saveDayes } from "../controllers/user.js";
+import { getAllWeek, getCurrentWeekly, initUser, loginUser, logout, registerUser, saveDayes } from "../controllers/user.js";
 
 const adminAuth = authProvider(true);
 const userAuth = authProvider(false);
@@ -43,9 +43,11 @@ adminRouter.post("/add", adminAuth, addIndex);
 adminRouter.get("/", adminAuth, initAdmin);
 
 
+// /user
 userRouter.get("/",userAuth,initUser)
 userRouter.post("/register",validation(registerValidation),registerUser)
 userRouter.post("/login",validation(loginValidation),loginUser)
 userRouter.get("/logout",userAuth,logout)
 userRouter.get("/getcurrentweek",userAuth,getCurrentWeekly)
+userRouter.get("/weeks",userAuth,getAllWeek)
 userRouter.post("/savedayes/:id",validation(weekUpdateValidation),userAuth,saveDayes)
