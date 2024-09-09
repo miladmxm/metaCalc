@@ -18,4 +18,3 @@ i18n.use(HttpBackend)
   },
 });
 export default i18n;
-console.log(import.meta.env.VITE_API_META_URL+"/locales/{{lng}}/{{ns}}.json")

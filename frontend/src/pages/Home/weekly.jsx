@@ -52,7 +52,6 @@ const Weekly = () => {
       if (!reg.test(value)) {
         el.classList.add("warning");
       } else {
-        console.log(el.dataset.mainName);
         if (isCommission) {
           newDayes[el.dataset.mainName].commission = Number(value);
           commissionIncome = sum(commissionIncome, Number(value))

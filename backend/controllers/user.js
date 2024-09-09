@@ -4,12 +4,12 @@ import Users from "../models/User.js";
 import GenerateError from "../utils/generateError.js";
 import Weeks from "../models/Weekly.js";
 import getCurrentWeek from "../utils/week.js";
-import sum from "../../frontend/src/utils/sum.js";
-import t from '../utils/t.js'
+import sum from "../utils/sum.js";
+import t from "../utils/t.js";
 export const initUser = async (req, res, next) => {
   try {
-    const user = await Users.findById(req.user_id, 'username email');
-    res.status(200).json({ user: user })
+    const user = await Users.findById(req.user_id, "username email");
+    res.status(200).json({ user: user });
   } catch (err) {
     next(err);
   }
@@ -17,19 +17,17 @@ export const initUser = async (req, res, next) => {
 
 export const getAllWeek = async (req, res, next) => {
   try {
-    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes")
+    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes");
 
-    const updatedWeeks = weeks.map(week => {
+    const updatedWeeks = weeks.map((week) => {
       let weekObj = week.toObject();
       let commission = 0;
       let profit = 0;
 
-      Object.values(weekObj.dayes).forEach(val => {
-
+      Object.values(weekObj.dayes).forEach((val) => {
         commission = sum(commission, val.commission);
         profit = sum(profit, val.profit);
       });
-
 
       weekObj.profit = profit;
       weekObj.commission = commission;
@@ -37,55 +35,58 @@ export const getAllWeek = async (req, res, next) => {
       return weekObj;
     });
 
-
-    res.status(200).json({ weeks: updatedWeeks })
+    res.status(200).json({ weeks: updatedWeeks });
   } catch (err) {
-    console.log(err)
-    next(err)
+    console.log(err);
+    next(err);
   }
-}
+};
 
 export const saveDayes = async (req, res, next) => {
   try {
-    const updatedWeek = await Weeks.findOneAndUpdate({
-      _id: req.params.id,
-      user: req.user_id
-    }, {
-      dayes: req.body.dayes
-    }, {
-      new: true
-    })
-    if (!updatedWeek) GenerateError(await t("not found", req.lang), 404)
-    res.status(200).json({ week: updatedWeek })
+    const updatedWeek = await Weeks.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        user: req.user_id,
+      },
+      {
+        dayes: req.body.dayes,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updatedWeek) GenerateError(await t("Not found", req.query.lang), 404);
+    res.status(200).json({ week: updatedWeek });
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
 export const getCurrentWeekly = async (req, res, next) => {
   try {
-    const [startWeek, endWeek] = getCurrentWeek()
+    const [startWeek, endWeek] = getCurrentWeek();
     let userWeek = await Weeks.findOne({
       from: startWeek,
       to: endWeek,
-      user: req.user_id
-    })
-    res.status(200)
+      user: req.user_id,
+    });
+    res.status(200);
     if (!userWeek) {
       userWeek = await Weeks.create({
         from: startWeek,
         to: endWeek,
-        user: req.user_id
-      })
-      res.status(201)
+        user: req.user_id,
+      });
+      res.status(201);
     }
-    res.json({ week: userWeek })
+    res.json({ week: userWeek });
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
-const setToken = (res, username, id) => {
+const setToken = async (res, username, id) => {
   try {
     const token = jwt.sign({ username, id }, process.env.USER_SECRET_KEY, {
       expiresIn: "5d",
@@ -98,24 +99,24 @@ const setToken = (res, username, id) => {
     });
   } catch (err) {
     console.log(err);
-    GenerateError("serverError", 500);
+    GenerateError(await t("Server error", req.query.lang), 500);
   }
 };
 
 export const logout = async (req, res, next) => {
   try {
-    res.clearCookie("jwt")
-    console.log(res.cookies)
-    res.status(200).json({ message: "loged out" })
+    res.clearCookie("jwt");
+    console.log(res.cookies);
+    res.status(200).json({ message: "loged out" });
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 export const registerUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const userIsExist = await Users.findOne({ $or: [{ username }, { email }] });
-    if (userIsExist) GenerateError("user is exist", 400);
+    if (userIsExist) GenerateError(await t("User is exist", req.query.lang), 400);
     const user = await Users.create({ username, email, password });
     setToken(res, username, user._id);
     res.status(201).json({ message: "user created" });
@@ -128,10 +129,17 @@ export const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await Users.findOne({ username });
-    if (!user) GenerateError("username or password is incorrect", 404);
+    if (!user)
+      GenerateError(
+        await t("Username or password is incorrect", req.query.lang),
+        404
+      );
     const comparePassword = await bcrypt.compare(password, user.password);
     if (!comparePassword)
-      GenerateError("username or password is incorrect", 404);
+      GenerateError(
+        await t("Username or password is incorrect", req.query.lang),
+        404
+      );
     setToken(res, username, user._id);
     res.status(200).json({ message: "You successfully logged in." });
   } catch (err) {

@@ -37,12 +37,12 @@ export const loginAdmin = async (req, res) => {
     if (!admin)
       return res
         .status(404)
-        .json({ message: "username or password is incorrect" });
+        .json({ message: "Username or password is incorrect" });
     const comparePassword = await bcrypt.compare(password, admin.password);
     if (!comparePassword)
       return res
         .status(404)
-        .json({ message: "username or password is incorrect" });
+        .json({ message: "Username or password is incorrect" });
 
     const token = jwt.sign(
       { username: admin.username, id: admin._id },

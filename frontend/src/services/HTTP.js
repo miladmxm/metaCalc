@@ -3,15 +3,21 @@ import Toast from "../components/Toast";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_API_META_URL;
+
 const http = axios.create({
   headers: {
     Accept: "*",
     "Content-Type": "application/json",
   },
-  params: {
-    lang: location.pathname.slice(1).split("/")[0]
-  }
 });
+
+function axiosRequestConfig (config){
+   config.params = { lang: location.pathname.slice(1).split("/")[0] }
+   return config
+} 
+
+http.interceptors.request.use(axiosRequestConfig)
+axios.interceptors.request.use(axiosRequestConfig)
 
 function axiosResponse(res) {
   return res.data;
@@ -77,7 +83,6 @@ export const saveDayes = async (body, weekId) => {
   }
 };
 
-
 export const getAllWeek = async () => {
   try {
     return await axios.get(`/user/weeks/`);
@@ -85,4 +90,3 @@ export const getAllWeek = async () => {
     console.log(err);
   }
 };
-

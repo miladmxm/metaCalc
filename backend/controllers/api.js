@@ -6,7 +6,7 @@ export const getAll = async (req, res,next) => {
         const allIndexes = await Indexes.find()
         res.status(200).json({ all: allIndexes })
     } catch (err) {
-        next()
+        next(err)
     }
 }
 

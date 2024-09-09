@@ -5,9 +5,12 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+ENV VITE_API_META_URL=http://localhost:5000
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD npm run dev
+EXPOSE 4173
+
+CMD npm run preview
