@@ -17,13 +17,17 @@ export const initUser = async (req, res, next) => {
 
 export const getAllWeek = async (req, res, next) => {
   try {
-    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes");
-
+    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes").sort("-createdAt")
+    const [startWeek, endWeek] = getCurrentWeek();
+    
     const updatedWeeks = weeks.map((week) => {
       let weekObj = week.toObject();
       let commission = 0;
       let profit = 0;
-
+      
+      if(startWeek-weekObj.from === 0){
+        weekObj.currentWeek = true
+      }
       Object.values(weekObj.dayes).forEach((val) => {
         commission = sum(commission, val.commission);
         profit = sum(profit, val.profit);

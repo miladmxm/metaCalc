@@ -71,8 +71,13 @@ const UserDashboard = () => {
           </>
         )}
         {weeks.map((week) => (
-          <div className="flex gap-3 flex-col cursor-pointer" key={week._id}>
-            <div className="dark:bg-primary/10 bg-gray-700 text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2">
+          <div
+            className={`flex ${
+              week.currentWeek ? "" : "scale-95"
+            } gap-3 flex-col cursor-pointer`}
+            key={week._id}
+          >
+            <div className={`${ week.currentWeek?"dark:bg-primary/10 bg-gray-700":"dark:bg-gray-700 bg-gray-500"} text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2`}>
               <div className="flex justify-between border-b border-text/50 pb-4">
                 <span>
                   {t("From")}:{" "}
