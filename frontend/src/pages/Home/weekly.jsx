@@ -1,19 +1,22 @@
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
-import { getcurrentweek, saveDayes } from "../../services/HTTP";
-import { mainContext } from "../../context/main";
+import { getcurrentweekHttp, saveDayes } from "../../services/HTTP";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
+import { useQuery } from "@tanstack/react-query";
+import constant from "../../constant";
 
 const Weekly = () => {
   const { t } = useTranslation();
   const [Income, setIncome] = useState([]);
-  const { setHttpLoading } = useContext(mainContext);
   const resultRef = useRef();
   const [dayes, setDayesuseState] = useState({});
-  const [weekId, setWeekId] = useState("");
+  const {data} = useQuery({
+    queryKey:[constant.CURRENT_WEEK_KEY],
+    queryFn:getcurrentweekHttp,
+  })
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newDayes = { ...dayes };
@@ -75,9 +78,7 @@ const Weekly = () => {
   };
   useEffect(() => {
     async function init() {
-      setHttpLoading(true);
       const data = await getcurrentweek();
-      setHttpLoading(false);
       if (data.week) {
         setWeekId(data.week._id);
         setDayesuseState(data.week.dayes);

@@ -6,10 +6,12 @@ import Weeks from "../models/Weekly.js";
 import getCurrentWeek from "../utils/week.js";
 import sum from "../utils/sum.js";
 import t from "../utils/t.js";
+
 export const initUser = async (req, res, next) => {
   try {
     const user = await Users.findById(req.user_id, "username email");
-    res.status(200).json({ user: user });
+    if (!user) GenerateError("user not find", 404);
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }
@@ -17,16 +19,19 @@ export const initUser = async (req, res, next) => {
 
 export const getAllWeek = async (req, res, next) => {
   try {
-    const weeks = await Weeks.find({ user: req.user_id }, "from to _id dayes").sort("-createdAt")
+    const weeks = await Weeks.find(
+      { user: req.user_id },
+      "from to _id dayes"
+    ).sort("-createdAt");
     const [startWeek, endWeek] = getCurrentWeek();
-    
+
     const updatedWeeks = weeks.map((week) => {
       let weekObj = week.toObject();
       let commission = 0;
       let profit = 0;
-      
-      if(startWeek-weekObj.from === 0){
-        weekObj.currentWeek = true
+
+      if (startWeek - weekObj.from === 0) {
+        weekObj.currentWeek = true;
       }
       Object.values(weekObj.dayes).forEach((val) => {
         commission = sum(commission, val.commission);
@@ -120,10 +125,11 @@ export const registerUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const userIsExist = await Users.findOne({ $or: [{ username }, { email }] });
-    if (userIsExist) GenerateError(await t("User is exist", req.query.lang), 400);
+    if (userIsExist)
+      GenerateError(await t("User is exist", req.query.lang), 400);
     const user = await Users.create({ username, email, password });
     setToken(res, username, user._id);
-    res.status(201).json({ message: "user created" });
+    res.status(201).json({username:user.username,email:user.email,_id:user._id});
   } catch (err) {
     next(err);
   }
@@ -145,7 +151,7 @@ export const loginUser = async (req, res, next) => {
         404
       );
     setToken(res, username, user._id);
-    res.status(200).json({ message: "You successfully logged in." });
+    res.status(200).json({username:user.username,email:user.email,_id:user._id});
   } catch (err) {
     next(err);
   }

@@ -1,16 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../../services/HTTP";
-import { mainContext } from "../../context/main";
+import { Navigate, useLocation } from "react-router-dom";
+import useUser from "../../hooks/useUser";
+import useSignIn from "../../hooks/useSignIn";
+import useSignUp from "../../hooks/useSignUp";
 const Login = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
-  const { init, user } = useContext(mainContext)
-
+  const { t } = useTranslation();
+  const { user } = useUser();
+  const signInMutation = useSignIn();
+  const signUpMutation = useSignUp();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isSignIn, setIsSignIn] = useState(true);
   const location = useLocation();
@@ -22,15 +21,11 @@ const Login = () => {
 
   const onSubmitedForm = async (data) => {
     const { password, username } = data;
-    const res = isSignIn
-      ? await loginUser({ username, password })
-      : await registerUser(data);
-    if (res) {
-      await init()
-    }
+    if (isSignIn) signInMutation({ username, password });
+    else signUpMutation(data);
   };
   if (user && user.username) {
-    return <Navigate to={location.state?.from || "../"} />
+    return <Navigate to={location.state?.from || "../"} />;
   }
 
   return (
@@ -52,8 +47,9 @@ const Login = () => {
               pattern:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             })}
-            className={` ${errors.email ? "bg-error/20" : "bg-text/10"
-              } transition-all duration-300 border-none outline-none py-2 px-3 rounded-lg`}
+            className={` ${
+              errors.email ? "bg-error/20" : "bg-text/10"
+            } transition-all duration-300 border-none outline-none py-2 px-3 rounded-lg`}
             type="email"
             name="email"
             id="email"
@@ -62,8 +58,9 @@ const Login = () => {
         <div className="flex flex-col gap-2">
           <label htmlFor="username">{t("Username")}:</label>
           <input
-            className={`${errors.username ? "bg-error/20" : "bg-text/10"
-              } border-none outline-none py-2 px-3 rounded-lg`}
+            className={`${
+              errors.username ? "bg-error/20" : "bg-text/10"
+            } border-none outline-none py-2 px-3 rounded-lg`}
             type="text"
             {...register("username", {
               required: true,
@@ -77,8 +74,9 @@ const Login = () => {
         <div className="flex flex-col gap-2 relative">
           <label htmlFor="password">{t("Password")}:</label>
           <input
-            className={`${errors.password ? "bg-error/20" : "bg-text/10"
-              } border-none outline-none py-2 px-3 rounded-lg`}
+            className={`${
+              errors.password ? "bg-error/20" : "bg-text/10"
+            } border-none outline-none py-2 px-3 rounded-lg`}
             type={isShowPassword ? "text" : "password"}
             {...register("password", {
               required: true,
@@ -91,8 +89,9 @@ const Login = () => {
           <button
             onClick={() => setIsShowPassword((pre) => !pre)}
             type="button"
-            className={`absolute ${isShowPassword ? "[&>svg]:-translate-y-full" : ""
-              } [&>svg]:duration-300 rtl:left-3 rtl:right-auto [&>svg]:ease-in-out [&>svg]:transition-all right-3 bottom-3 h-4 overflow-hidden`}
+            className={`absolute ${
+              isShowPassword ? "[&>svg]:-translate-y-full" : ""
+            } [&>svg]:duration-300 rtl:left-3 rtl:right-auto [&>svg]:ease-in-out [&>svg]:transition-all right-3 bottom-3 h-4 overflow-hidden`}
           >
             <svg
               stroke="currentColor"

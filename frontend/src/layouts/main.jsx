@@ -4,12 +4,11 @@ import ThemeSwitch from "../components/ThemeSwitch";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import InstallPWAbtn from "../components/installPWAbtn";
-import { useContext } from "react";
-import { mainContext } from "../context/main";
+import useUser from "../hooks/useUser";
 const MainLayout = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { user } = useContext(mainContext);
+  const {user} = useUser()
   const isWeekly =
     location.pathname.includes("weekly") || location.pathname.includes("login") || location.pathname.includes("dashboard") ;
   return (
@@ -32,7 +31,7 @@ const MainLayout = ({ children }) => {
         </div>
       </header>
       <section className="flex-auto max-h-[83%]">{children}</section>
-      <footer className="dark:bg-primary/10 bg-primary/60 rounded-lg absolute bottom-5 left-3 right-3 md:left-8 md:right-8">
+      <footer className="dark:bg-primary/10 backdrop-blur-md bg-primary/60 rounded-lg absolute bottom-5 left-3 right-3 md:left-8 md:right-8">
         <nav>
           <ul className="flex justify-between items-center [&>li]:w-1/3 [&_small]:leading-[0]">
             <li>
@@ -75,7 +74,7 @@ const MainLayout = ({ children }) => {
               </NavLink>
             </li>
             <li>
-              {user.username ? (
+              {user?.username ? (
                 <NavLink
                   to={"dashboard"}
                   className={

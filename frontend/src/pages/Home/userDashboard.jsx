@@ -1,36 +1,26 @@
-import { useContext, useEffect, useState } from "react";
 import AuthUser from "../../HOC/authUser";
-import { getAllWeek, logoutUser } from "../../services/HTTP";
-import { mainContext } from "../../context/main";
+import { getAllWeekHttp } from "../../services/HTTP";
 import { useTranslation } from "react-i18next";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
 import { Link } from "react-router-dom";
+import useSignOut from "../../hooks/useSignOut";
+import { useQuery } from "@tanstack/react-query";
+import constant from "../../constant";
 
 const UserDashboard = () => {
-  const { clearUser, setHttpLoading } = useContext(mainContext);
+  const singOutMutation = useSignOut();
+  const {data} = useQuery({
+    queryKey: [constant.WEEKS_KEY],
+    queryFn: getAllWeekHttp,
+  });
   const {
     t,
     i18n: { language },
   } = useTranslation();
-  const [weeks, setWeeks] = useState([]);
   const logout = async () => {
-    const data = await logoutUser();
-    if (data) {
-      console.log(data);
-      clearUser();
-    }
+    singOutMutation();
   };
-  useEffect(() => {
-    const init = async () => {
-      setHttpLoading(true);
-      const all = await getAllWeek();
-      setHttpLoading(false);
-      setWeeks(all.weeks);
-    };
-    init();
-    return () => [setHttpLoading(false)];
-  }, []);
   return (
     <div className="h-full max-h-[75svh]">
       <button
@@ -57,7 +47,7 @@ const UserDashboard = () => {
         </svg>
       </button>
       <div className="max-h-full pr-1 rtl:pl-1 overflow-auto scrollbar space-y-5">
-        {weeks.length === 0 && (
+        {data?.weeks?.length === 0 && (
           <>
             <h3 className="center text-2xl font-bold">
               {t("No weekly reports have been recorded!")}
@@ -70,14 +60,20 @@ const UserDashboard = () => {
             </Link>
           </>
         )}
-        {weeks.map((week) => (
+        {data?.weeks?.map((week) => (
           <div
             className={`flex ${
               week.currentWeek ? "" : "scale-95"
             } gap-3 flex-col cursor-pointer`}
             key={week._id}
           >
-            <div className={`${ week.currentWeek?"dark:bg-primary/10 bg-gray-700":"dark:bg-gray-700 bg-gray-500"} text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2`}>
+            <div
+              className={`${
+                week.currentWeek
+                  ? "dark:bg-primary/10 bg-gray-700"
+                  : "dark:bg-gray-700 bg-gray-500"
+              } text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2`}
+            >
               <div className="flex justify-between border-b border-text/50 pb-4">
                 <span>
                   {t("From")}:{" "}

@@ -33,7 +33,7 @@ mainRouter.get("/locales/:lang/*",locales)
 // /admin
 adminRouter.post("/register", validation(registerValidation), registerAdmin);
 adminRouter.post(
-  "/first",
+  "/setup",
   isFirstRequest,
   validation(registerValidation),
   registerAdmin
@@ -45,8 +45,10 @@ adminRouter.get("/", adminAuth, initAdmin);
 
 // /user
 userRouter.get("/",userAuth,initUser)
-userRouter.post("/register",validation(registerValidation),registerUser)
-userRouter.post("/login",validation(loginValidation),loginUser)
+userRouter.post("/signup",validation(registerValidation),registerUser)
+userRouter.post("/signin",validation(loginValidation),loginUser)
+userRouter.delete("/signout",userAuth,logout)
+
 userRouter.get("/logout",userAuth,logout)
 userRouter.get("/getcurrentweek",userAuth,getCurrentWeekly)
 userRouter.get("/weeks",userAuth,getAllWeek)
