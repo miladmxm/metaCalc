@@ -12,7 +12,7 @@ const UserDashboard = () => {
   const singOutMutation = useSignOut();
   const {data} = useQuery({
     queryKey: [constant.WEEKS_KEY],
-    queryFn: getAllWeekHttp,
+    queryFn:({signal})=> getAllWeekHttp(signal),
   });
   const {
     t,
@@ -22,7 +22,7 @@ const UserDashboard = () => {
     singOutMutation();
   };
   return (
-    <div className="h-full max-h-[75svh]">
+    <div className="h-full max-h-[68svh]">
       <button
         className="ml-0 mr-auto center gap-1 my-2 bg-error/10 w-fit px-4 rounded-lg py-2 "
         onClick={logout}

@@ -1,10 +1,10 @@
 import { join } from 'path'
 import Indexes from "../models/Indexes.js"
 
-export const getAll = async (req, res,next) => {
+export const getAllIndexes = async (req, res,next) => {
     try {
         const allIndexes = await Indexes.find()
-        res.status(200).json({ all: allIndexes })
+        res.status(200).json({ indexes:allIndexes })
     } catch (err) {
         next(err)
     }

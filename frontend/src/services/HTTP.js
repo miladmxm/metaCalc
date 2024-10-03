@@ -31,29 +31,15 @@ http.interceptors.response.use(axiosResponse, function (error) {
   }
 });
 
-export const getMain = async () => {
-  try {
-    return await http.get("/api/");
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getIndexesHttp =()=>http.get("/api/indexes");
 
 export const signInHttp = (data) => http.post("/user/signin", data);
 export const signUpHttp = (data) => http.post("/user/signup", data);
 export const signOutUpHttp = () => http.delete("/user/signout");
 export const getUserHttp = (signal) => axios.get("/user/", { signal });
 
-export const getAllWeekHttp = () => http.get(`/user/weeks`);
+export const getAllWeekHttp = (signal) => http.get(`/user/weeks`,{signal});
 
-export const getcurrentweekHttp=()=>http.get("/user/getcurrentweek");
+export const getcurrentweekHttp = (signal) => http.get("/user/getcurrentweek",{signal});
 
-export const saveDayes = async (body, weekId) => {
-  try {
-    return await axios.post(`/user/savedayes/${weekId}`, body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
+export const updateWeekByIdHttp = (data,weekId)=>http.put(`/user/weeks/${weekId}`,data)

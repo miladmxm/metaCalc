@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll, locales } from "../controllers/api.js";
+import { getAllIndexes, locales } from "../controllers/api.js";
 import {
   addIndex,
   initAdmin,
@@ -17,7 +17,7 @@ import { weekUpdateValidation } from "../validations/user.js";
 
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
-import { getAllWeek, getCurrentWeekly, initUser, loginUser, logout, registerUser, saveDayes } from "../controllers/user.js";
+import { getAllWeek, getCurrentWeekly, getWeekById, initUser, loginUser, logout, registerUser, updateWeekById } from "../controllers/user.js";
 
 const adminAuth = authProvider(true);
 const userAuth = authProvider(false);
@@ -27,7 +27,7 @@ export const adminRouter = new Router();
 export const userRouter = new Router();
 
 // /api
-mainRouter.get("/", getAll);
+mainRouter.get("/indexes", getAllIndexes);
 mainRouter.get("/locales/:lang/*",locales)
 
 // /admin
@@ -52,4 +52,5 @@ userRouter.delete("/signout",userAuth,logout)
 userRouter.get("/logout",userAuth,logout)
 userRouter.get("/getcurrentweek",userAuth,getCurrentWeekly)
 userRouter.get("/weeks",userAuth,getAllWeek)
-userRouter.post("/savedayes/:id",validation(weekUpdateValidation),userAuth,saveDayes)
+userRouter.get("/weeks/:id",userAuth,getWeekById)
+userRouter.put("/weeks/:id",validation(weekUpdateValidation),userAuth,updateWeekById)

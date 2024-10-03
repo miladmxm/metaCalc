@@ -50,8 +50,19 @@ export const getAllWeek = async (req, res, next) => {
     next(err);
   }
 };
-
-export const saveDayes = async (req, res, next) => {
+export const getWeekById = async (req,res,next)=>{
+  try {
+    const week = await Weeks.findOne({
+      _id:req.params.id,
+      user:req.user_id
+    })
+    if(!week) GenerateError(await t("Not found", req.query.lang),404)
+    res.status(200).json(week)
+  } catch (err) {
+    next(err)
+  }
+}
+export const updateWeekById = async (req, res, next) => {
   try {
     const updatedWeek = await Weeks.findOneAndUpdate(
       {
