@@ -63,7 +63,7 @@ const UserDashboard = () => {
           </>
         )}
         {data?.weeks?.map((week) => (
-          <div
+          <Link to={`week/${week._id}`}
             className={cn("flex gap-3 flex-col cursor-pointer", {
               "scale-95": !week.currentWeek,
             })}
@@ -105,7 +105,7 @@ const UserDashboard = () => {
                 </small>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

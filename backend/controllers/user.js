@@ -6,6 +6,7 @@ import Weeks from "../models/Weekly.js";
 import getCurrentWeek from "../utils/week.js";
 import sum from "../utils/sum.js";
 import t from "../utils/t.js";
+import addDateToWeekDays from "../utils/addDateToWeekDays.js";
 
 export const initUser = async (req, res, next) => {
   try {
@@ -23,7 +24,7 @@ export const getAllWeek = async (req, res, next) => {
       { user: req.user_id },
       "from to _id dayes"
     ).sort("-createdAt");
-    const [startWeek, endWeek] = getCurrentWeek();
+    const [startWeek] = getCurrentWeek();
 
     const updatedWeeks = weeks.map((week) => {
       let weekObj = week.toObject();
@@ -40,8 +41,7 @@ export const getAllWeek = async (req, res, next) => {
 
       weekObj.profit = profit;
       weekObj.commission = commission;
-
-      return weekObj;
+      return addDateToWeekDays(weekObj);
     });
 
     res.status(200).json({ weeks: updatedWeeks });
@@ -57,7 +57,9 @@ export const getWeekById = async (req,res,next)=>{
       user:req.user_id
     })
     if(!week) GenerateError(await t("Not found", req.query.lang),404)
-    res.status(200).json(week)
+    const weekWithDate = addDateToWeekDays(week.toObject())
+  
+    res.status(200).json({week:weekWithDate})
   } catch (err) {
     next(err)
   }

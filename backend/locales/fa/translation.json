@@ -37,6 +37,7 @@
   "I have already registered":"قبلا ثبت نام کرده‌ام",
   "Dashboard":"داشبورد",
   "From":"تاریخ شروع",
+  "from":"تاریخ شروع",
   "To":"تاریخ پایان",
   "Logout":"خروج",
   "No weekly reports have been recorded!":"هیچ گزارش هفتگی ثبت نشده است!",
@@ -44,5 +45,7 @@
   "Username or password is incorrect":"نام کاربری یا رمز عبور اشتباه است",
   "Not found":"پیدا نشد",
   "Server error":"خطای سمت سرور",
-  "User is exist":"این کاربر از قبل وجود دارد"
+  "User is exist":"این کاربر از قبل وجود دارد",
+  "Week":"هفته",
+  "Date":"تاریخ"
 }

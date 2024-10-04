@@ -15,7 +15,7 @@ const MainLayout = ({ children }) => {
   const isWeekly =
     location.pathname.includes("weekly") || location.pathname.includes("login") || location.pathname.includes("dashboard") ;
   return (
-    <main className={cn("max-w-2xl transition-all duration-300 grid-rows-3 max-h-svh h-svh mx-auto grid relative overflow-hidden",{
+    <main className={cn("max-w-2xl w-full transition-all duration-300 grid-rows-3 max-h-svh h-svh mx-auto grid relative overflow-hidden",{
       "grid-rows-[120px_calc(100svh-48px-120px)_48px]":!isWeekly,
       "grid-rows-[80px_calc(100svh-48px-80px)_48px]":isWeekly,
     })}
