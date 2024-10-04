@@ -1,10 +1,13 @@
+import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import cn from "classnames"
+
 import LanguageSwitch from "../components/LanguageSwitch";
 import logo from "../assets/Images/meta.webp";
 import ThemeSwitch from "../components/ThemeSwitch";
-import { NavLink, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import InstallPWAbtn from "../components/installPWAbtn";
 import useUser from "../hooks/useUser";
+
 const MainLayout = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -12,13 +15,16 @@ const MainLayout = ({ children }) => {
   const isWeekly =
     location.pathname.includes("weekly") || location.pathname.includes("login") || location.pathname.includes("dashboard") ;
   return (
-    <main className="max-w-2xl max-h-svh h-svh mx-auto py-4 p-3 md:p-8 flex flex-col gap-7 relative overflow-hidden">
+    <main className={cn("max-w-2xl transition-all duration-300 grid-rows-3 max-h-svh h-svh mx-auto grid relative overflow-hidden",{
+      "grid-rows-[120px_calc(100svh-48px-120px)_48px]":!isWeekly,
+      "grid-rows-[80px_calc(100svh-48px-80px)_48px]":isWeekly,
+    })}
+  
+    >
       <InstallPWAbtn />
       <header
         dir="ltr"
-        className={`flex items-center justify-between transition-all duration-300 ${
-          isWeekly ? "h-10" : "h-20"
-        } `}
+        className={`flex items-center justify-between transition-all duration-300 px-3 py-4 `}
       >
         <div className="flex-1 justify-start flex">
           <LanguageSwitch className="flex-1" />
@@ -30,9 +36,9 @@ const MainLayout = ({ children }) => {
           <ThemeSwitch />
         </div>
       </header>
-      <section className="flex-auto max-h-[83%]">{children}</section>
-      <footer className="dark:bg-primary/10 backdrop-blur-md bg-primary/60 rounded-lg absolute bottom-5 left-3 right-3 md:left-8 md:right-8">
-        <nav>
+      <section className=" px-3 py-4">{children}</section>
+      <footer className="flex items-start justify-center  px-3">
+        <nav className="dark:bg-primary/10 backdrop-blur-md bg-primary/60 rounded-lg w-full">
           <ul className="flex justify-between items-center [&>li]:w-1/3 [&_small]:leading-[0]">
             <li>
               <NavLink

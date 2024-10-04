@@ -5,7 +5,7 @@ const InputField = ({ label, placeholder, name, onInput, icon = true, defaultVal
   return (
     <fieldset
       ref={fieldsetRef}
-      className={`max-w-full [&:has(input.warning)>legend]:text-warning [&:has(input.warning)]:text-warning [&:has(input.warning)]:border-warning [&:has(input.error)>legend]:text-error [&:has(input.error)]:text-error [&:has(input.error)]:border-error text-sm md:text-lg border-[1px] dark:border-text/70 border-text rounded-lg p-2 flex relative justify-end flex-wrap`}
+      className="max-w-full [&:has(input.warning)>legend]:text-warning [&:has(input.warning)]:text-warning [&:has(input.warning)]:border-warning [&:has(input.error)>legend]:text-error [&:has(input.error)]:text-error [&:has(input.error)]:border-error text-sm md:text-lg border-[1px] dark:border-text/70 border-text rounded-lg p-2 flex relative justify-end flex-wrap"
     >
       <legend className="sm:mx-3 px-1 text-sm dark:text-text/70">
         {label}

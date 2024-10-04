@@ -19,7 +19,7 @@ const Home = () => {
     }
   }, [data, isSuccess]);
   const Indexes = data?.indexes || null;
-  const activeIndex = Indexes?.find(index =>index._id === activeIndexId)
+  const activeIndex = Indexes?.find((index) => index._id === activeIndexId);
   const [errMessage, setErrMessage] = useState("");
   const [resolve, setResolve] = useState([]);
   const formRef = useRef();
@@ -91,11 +91,13 @@ const Home = () => {
         onSubmit={(e) => handleSubmitForm(e)}
       >
         <fieldset
-          className={`${
-            errMessage !== ""
-              ? "border-error/70 text-error/70"
-              : "border-text/70"
-          } border rounded-lg p-2 flex relative justify-end flex-wrap`}
+          className={cn(
+            "border rounded-lg p-2 flex relative justify-end flex-wrap",
+            {
+              "border-error/70 text-error/70": errMessage !== "",
+              "border-text/70": errMessage === "",
+            }
+          )}
         >
           <legend className="mx-3 px-1">{t("Enter your capital")}</legend>
           <div className="center ">
@@ -145,9 +147,12 @@ const Home = () => {
             </svg>
           </button>
           <small
-            className={`block w-full text-error ${
-              errMessage !== "" ? "h-6 mt-1" : "h-0"
-            } transition-all duration-300 overflow-hidden`}
+            className={cn(
+              "block w-full text-error transition-all h-0 duration-300 overflow-hidden",
+              {
+                "h-6 mt-1": errMessage !== ""
+              }
+            )}
           >
             {errMessage}
           </small>
@@ -164,10 +169,10 @@ const Home = () => {
       >
         <div
           onClick={() => copyToClipbord(resolve[0])}
-          className={`md:w-1/2 w-5/6 dark:bg-primary/5
+          className="md:w-1/2 w-5/6 dark:bg-primary/5
             opacity-0 pointer-events-none transition-all duration-300 translate-y-5 scale-95
             dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center
-            `}
+            "
         >
           {t("Trading volume (lot): ")} <span> {resolve[0]}</span>
         </div>
@@ -201,7 +206,7 @@ const Home = () => {
 
       <div
         ref={alertCopy}
-        className={`fixed left-0 [&.active]:opacity-100 [&.active]:translate-y-0 bottom-[15%] pointer-events-none w-full translate-y-10 center transition-all opacity-0 duration-300`}
+        className="fixed left-0 [&.active]:opacity-100 [&.active]:translate-y-0 bottom-[15%] pointer-events-none w-full translate-y-10 center transition-all opacity-0 duration-300"
       >
         <div className="p-2 bg-gray-800 text-white rounded-lg ">
           {t("Copied")}

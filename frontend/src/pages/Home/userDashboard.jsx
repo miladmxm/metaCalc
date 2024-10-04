@@ -1,18 +1,20 @@
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import cn from "classnames";
+
 import AuthUser from "../../HOC/authUser";
 import { getAllWeekHttp } from "../../services/HTTP";
-import { useTranslation } from "react-i18next";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
-import { Link } from "react-router-dom";
 import useSignOut from "../../hooks/useSignOut";
-import { useQuery } from "@tanstack/react-query";
 import constant from "../../constant";
 
 const UserDashboard = () => {
   const singOutMutation = useSignOut();
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: [constant.WEEKS_KEY],
-    queryFn:({signal})=> getAllWeekHttp(signal),
+    queryFn: ({ signal }) => getAllWeekHttp(signal),
   });
   const {
     t,
@@ -22,9 +24,9 @@ const UserDashboard = () => {
     singOutMutation();
   };
   return (
-    <div className="h-full max-h-[68svh]">
+    <div className="h-full flex flex-col gap-3">
       <button
-        className="ml-0 mr-auto center gap-1 my-2 bg-error/10 w-fit px-4 rounded-lg py-2 "
+        className="ml-0 mr-auto center gap-1 bg-error/10 w-fit px-4 rounded-lg py-2 "
         onClick={logout}
       >
         {t("Logout")}
@@ -62,17 +64,19 @@ const UserDashboard = () => {
         )}
         {data?.weeks?.map((week) => (
           <div
-            className={`flex ${
-              week.currentWeek ? "" : "scale-95"
-            } gap-3 flex-col cursor-pointer`}
+            className={cn("flex gap-3 flex-col cursor-pointer", {
+              "scale-95": !week.currentWeek,
+            })}
             key={week._id}
           >
             <div
-              className={`${
-                week.currentWeek
-                  ? "dark:bg-primary/10 bg-gray-700"
-                  : "dark:bg-gray-700 bg-gray-500"
-              } text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2`}
+              className={cn(
+                "text-baseColor dark:text-text space-y-2 p-3 rounded-lg gap-2",
+                {
+                  "dark:bg-primary/10 bg-gray-700": week.currentWeek,
+                  "dark:bg-gray-700 bg-gray-500": !week.currentWeek,
+                }
+              )}
             >
               <div className="flex justify-between border-b border-text/50 pb-4">
                 <span>

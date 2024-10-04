@@ -88,7 +88,7 @@ const Weekly = () => {
   return (
     <div className="h-full space-y-5 overflow-auto scrollbar pr-1 rtl:pl-1">
       <h2>{t("Weekly income")}</h2>
-      <form className="overflow-auto max-h-[90%]" onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <div className="flex gap-5">
           <div className="w-1/2 space-y-2">
             <InputField
