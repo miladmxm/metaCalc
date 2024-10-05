@@ -15,7 +15,7 @@ const Home = () => {
 
   useEffect(() => {
     if (isSuccess && data?.indexes) {
-      setActiveIndexId(data.indexes[0]._id);
+      setActiveIndexId(data.indexes[0]?._id);
     }
   }, [data, isSuccess]);
   const Indexes = data?.indexes || null;

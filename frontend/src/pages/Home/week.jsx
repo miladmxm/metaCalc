@@ -33,7 +33,11 @@ const Week = () => {
   dayes.sort((a, b) => {
     return new Date(a.date) - new Date(b.date);
   });
-  //   console.log(dayes.sort((a,b)=>{a.date=b.date}))
+  dayes.forEach((day)=>{
+    const str = new Date(day.date).toLocaleDateString(language)
+    day.strDate = str
+    return day
+  })
   return (
     <div className="space-y-5 h-full w-full max-w-[calc(100svw-24px)] flex flex-col">
       <h1>
@@ -56,7 +60,7 @@ const Week = () => {
           <tbody className="[&>tr:nth-child(even)]:bg-primary/10">
             {dayes.map((day) => (
               <tr key={day.date}>
-                <td className="py-1 text-center px-1">{new Date(day.date).toLocaleDateString(language)}</td>
+                <td className="py-1 text-center px-1">{day.strDate}</td>
                 <td className="py-1 text-center">
                   <NumberWithDollar number={day.profit} />
                 </td>
@@ -87,10 +91,10 @@ const Week = () => {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="1 1" />
-          <XAxis dataKey="date" />
+          <CartesianGrid strokeDasharray="5 5" stroke="#a1a1a155" />
+          <XAxis color="#ff0000" dataKey="strDate" />
           <YAxis />
-          <Tooltip />
+          <Tooltip/>
           <Legend />
           <Line
             type="monotone"

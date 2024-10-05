@@ -53,22 +53,24 @@ const Login = () => {
               "transition-all duration-300 border-none outline-none py-2 px-3 rounded-lg",
               {
                 "bg-error/20": errors.email,
-                "bg-text/10":!errors.email
+                "bg-text/10": !errors.email
               }
             )}
             type="email"
             name="email"
             id="email"
+            autoComplete="email"
           />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="username">{t("Username")}:</label>
           <input
+            autoComplete="username"
             className={cn(
               "border-none outline-none py-2 px-3 rounded-lg",
               {
                 "bg-error/20": errors.username,
-                "bg-text/10":!errors.username
+                "bg-text/10": !errors.username
               }
             )}
             type="text"
@@ -87,7 +89,7 @@ const Login = () => {
             className={cn("border-none outline-none py-2 px-3 rounded-lg",
               {
                 "bg-error/20": errors.password,
-                "bg-text/10":!errors.password
+                "bg-text/10": !errors.password
               }
             )}
             type={isShowPassword ? "text" : "password"}
@@ -98,13 +100,13 @@ const Login = () => {
               maxLength: 200,
             })}
             id="password"
+            autoComplete={isSignIn ? "current-password" : "new-password"}
           />
           <button
             onClick={() => setIsShowPassword((pre) => !pre)}
             type="button"
-            className={`absolute ${
-              isShowPassword ? "[&>svg]:-translate-y-full" : ""
-            } [&>svg]:duration-300 rtl:left-3 rtl:right-auto [&>svg]:ease-in-out [&>svg]:transition-all right-3 bottom-3 h-4 overflow-hidden`}
+            className={`absolute ${isShowPassword ? "[&>svg]:-translate-y-full" : ""
+              } [&>svg]:duration-300 rtl:left-3 rtl:right-auto [&>svg]:ease-in-out [&>svg]:transition-all right-3 bottom-3 h-4 overflow-hidden`}
           >
             <svg
               stroke="currentColor"
