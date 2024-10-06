@@ -11,13 +11,13 @@ const http = axios.create({
   },
 });
 
-function axiosRequestConfig (config){
-   config.params = { lang: location.pathname.slice(1).split("/")[0] }
-   return config
-} 
+function axiosRequestConfig(config) {
+  config.params = { lang: location.pathname.slice(1).split("/")[0] };
+  return config;
+}
 
-http.interceptors.request.use(axiosRequestConfig)
-axios.interceptors.request.use(axiosRequestConfig)
+http.interceptors.request.use(axiosRequestConfig);
+axios.interceptors.request.use(axiosRequestConfig);
 
 function axiosResponse(res) {
   return res.data;
@@ -27,66 +27,22 @@ axios.interceptors.response.use(axiosResponse);
 http.interceptors.response.use(axiosResponse, function (error) {
   if (error) {
     Toast(error.response.data.message, "error");
+    throw error;
   }
 });
 
-export const getMain = async () => {
-  try {
-    return await http.get("/api/");
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getIndexesHttp = () => http.get("/api/indexes");
 
-export const registerUser = async (body) => {
-  try {
-    return await http.post("/user/register", body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-export const loginUser = async (body) => {
-  try {
-    return await http.post("/user/login", body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-export const logoutUser = async () => {
-  try {
-    return await http.get("/user/logout");
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const signInHttp = (data) => http.post("/user/signin", data);
+export const signUpHttp = (data) => http.post("/user/signup", data);
+export const signOutUpHttp = () => http.delete("/user/signout");
+export const getUserHttp = (signal) => axios.get("/user/", { signal });
 
-export const initUser = async () => {
-  try {
-    return await axios.get("/user/");
-  } catch (err) {
-    console.log(err);
-  }
-};
-export const getcurrentweek = async () => {
-  try {
-    return await axios.get("/user/getcurrentweek/");
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getAllWeekHttp = (signal) => http.get(`/user/weeks`, { signal });
 
-export const saveDayes = async (body, weekId) => {
-  try {
-    return await axios.post(`/user/savedayes/${weekId}`, body);
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getcurrentweekHttp = (signal) =>
+  http.get("/user/getcurrentweek", { signal });
 
-export const getAllWeek = async () => {
-  try {
-    return await axios.get(`/user/weeks/`);
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const getWeekByIdHttp = (weekId,signal) => http.get(`/user/weeks/${weekId}`,{signal});
+export const updateWeekByIdHttp = (data, weekId) =>
+  http.put(`/user/weeks/${weekId}`, data);

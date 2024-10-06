@@ -6,6 +6,7 @@ import Home from "../pages/Home/home";
 import Weekly from "../pages/Home/weekly";
 import Login from "../pages/Home/Login";
 import UserDashboard from "../pages/Home/userDashboard";
+import Week from "../pages/Home/week";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
           {
             path:"dashboard",
             element:<UserDashboard/>
+          },
+          {
+            path:"dashboard/week/:id",
+            element:<Week/>
           }
         ]
       },

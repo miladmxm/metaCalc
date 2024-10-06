@@ -1,16 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../../services/HTTP";
-import { mainContext } from "../../context/main";
-const Login = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
-  const { init, user } = useContext(mainContext)
+import { Navigate, useLocation } from "react-router-dom";
+import cn from "classnames";
 
+import useUser from "../../hooks/useUser";
+import useSignIn from "../../hooks/useSignIn";
+import useSignUp from "../../hooks/useSignUp";
+const Login = () => {
+  const { t } = useTranslation();
+  const { user } = useUser();
+  const signInMutation = useSignIn();
+  const signUpMutation = useSignUp();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isSignIn, setIsSignIn] = useState(true);
   const location = useLocation();
@@ -22,15 +23,11 @@ const Login = () => {
 
   const onSubmitedForm = async (data) => {
     const { password, username } = data;
-    const res = isSignIn
-      ? await loginUser({ username, password })
-      : await registerUser(data);
-    if (res) {
-      await init()
-    }
+    if (isSignIn) signInMutation({ username, password });
+    else signUpMutation(data);
   };
   if (user && user.username) {
-    return <Navigate to={location.state?.from || "../"} />
+    return <Navigate to={location.state?.from || "../"} />;
   }
 
   return (
@@ -43,7 +40,7 @@ const Login = () => {
       >
         <div
           style={!isSignIn ? { height: "75px" } : {}}
-          className={`flex overflow-hidden h-0 transition-all duration-300 ease-in-out flex-col gap-2`}
+          className="flex overflow-hidden h-0 transition-all duration-300 ease-in-out flex-col gap-2"
         >
           <label htmlFor="email">{t("E-Mail")}:</label>
           <input
@@ -52,18 +49,30 @@ const Login = () => {
               pattern:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             })}
-            className={` ${errors.email ? "bg-error/20" : "bg-text/10"
-              } transition-all duration-300 border-none outline-none py-2 px-3 rounded-lg`}
+            className={cn(
+              "transition-all duration-300 border-none outline-none py-2 px-3 rounded-lg",
+              {
+                "bg-error/20": errors.email,
+                "bg-text/10": !errors.email
+              }
+            )}
             type="email"
             name="email"
             id="email"
+            autoComplete="email"
           />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="username">{t("Username")}:</label>
           <input
-            className={`${errors.username ? "bg-error/20" : "bg-text/10"
-              } border-none outline-none py-2 px-3 rounded-lg`}
+            autoComplete="username"
+            className={cn(
+              "border-none outline-none py-2 px-3 rounded-lg",
+              {
+                "bg-error/20": errors.username,
+                "bg-text/10": !errors.username
+              }
+            )}
             type="text"
             {...register("username", {
               required: true,
@@ -77,8 +86,12 @@ const Login = () => {
         <div className="flex flex-col gap-2 relative">
           <label htmlFor="password">{t("Password")}:</label>
           <input
-            className={`${errors.password ? "bg-error/20" : "bg-text/10"
-              } border-none outline-none py-2 px-3 rounded-lg`}
+            className={cn("border-none outline-none py-2 px-3 rounded-lg",
+              {
+                "bg-error/20": errors.password,
+                "bg-text/10": !errors.password
+              }
+            )}
             type={isShowPassword ? "text" : "password"}
             {...register("password", {
               required: true,
@@ -87,6 +100,7 @@ const Login = () => {
               maxLength: 200,
             })}
             id="password"
+            autoComplete={isSignIn ? "current-password" : "new-password"}
           />
           <button
             onClick={() => setIsShowPassword((pre) => !pre)}

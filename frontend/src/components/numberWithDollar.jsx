@@ -1,8 +1,13 @@
-import React from 'react'
+import cn from 'classnames'
 
 const NumberWithDollar = ({ number }) => {
     return (
-        <span dir='ltr' className={`${number>0?"text-success":number<0?"text-error":"text-text"} center`}>
+        <span dir='ltr' className={
+            cn("center",{
+                "text-success":number>0,
+                "text-error":number<0,
+                "text-text":number ===0
+            })}>
             {" "}
             {number}
             <svg

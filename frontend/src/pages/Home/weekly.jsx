@@ -1,19 +1,33 @@
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
-import { getcurrentweek, saveDayes } from "../../services/HTTP";
-import { mainContext } from "../../context/main";
+import {
+  getcurrentweekHttp,
+  updateWeekByIdHttp,
+} from "../../services/HTTP";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import constant from "../../constant";
 
 const Weekly = () => {
   const { t } = useTranslation();
   const [Income, setIncome] = useState([]);
-  const { setHttpLoading } = useContext(mainContext);
   const resultRef = useRef();
-  const [dayes, setDayesuseState] = useState({});
-  const [weekId, setWeekId] = useState("");
+  const queryClinet = useQueryClient();
+  const { data } = useQuery({
+    queryKey: [constant.CURRENT_WEEK_KEY],
+    queryFn: ({ signal }) => getcurrentweekHttp(signal),
+  });
+  const updateWeekMutation = useMutation({
+    mutationFn: (weekData) => updateWeekByIdHttp(weekData, data.week._id),
+    mutationKey: [constant.UPDATE_WEEK_KEY],
+    onSuccess: () => {
+      queryClinet.invalidateQueries([constant.WEEKS_KEY]);
+    },
+  });
+  const dayes = data?.week.dayes || {};
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newDayes = { ...dayes };
@@ -54,7 +68,7 @@ const Weekly = () => {
       } else {
         if (isCommission) {
           newDayes[el.dataset.mainName].commission = Number(value);
-          commissionIncome = sum(commissionIncome, Number(value))
+          commissionIncome = sum(commissionIncome, Number(value));
         } else {
           newDayes[el.dataset.mainName].profit = Number(value);
           profitIncome = sum(profitIncome, Number(value));
@@ -63,9 +77,7 @@ const Weekly = () => {
     }
     ProfitFields.forEach((e) => forEachElement(e, false));
     CommissionFields.forEach((e) => forEachElement(e, true));
-    setHttpLoading(true)
-    await saveDayes({ dayes: newDayes }, weekId);
-    setHttpLoading(false)
+    updateWeekMutation.mutate({ dayes: newDayes });
     setIncome([profitIncome, commissionIncome]);
     resultRef.current.classList.add("active");
   };
@@ -73,27 +85,12 @@ const Weekly = () => {
     if (resultRef.current.classList.contains("active"))
       resultRef.current.classList.remove("active");
   };
-  useEffect(() => {
-    async function init() {
-      setHttpLoading(true);
-      const data = await getcurrentweek();
-      setHttpLoading(false);
-      if (data.week) {
-        setWeekId(data.week._id);
-        setDayesuseState(data.week.dayes);
-      }
-    }
-    init();
-    return () => {
-      setHttpLoading(false);
-    };
-  }, []);
   return (
     <div className="h-full space-y-5 overflow-auto scrollbar pr-1 rtl:pl-1">
       <h2>{t("Weekly income")}</h2>
-      <form className="overflow-auto max-h-[90%]" onSubmit={handleFormSubmit}>
-        <div className="flex gap-5">
-          <div className="w-1/2 space-y-2">
+      <form onSubmit={handleFormSubmit}>
+        <div className="flex gap-5 max-[335px]:flex-col">
+          <div className="max-[335px]:w-full w-1/2 space-y-2 max-[335px]:border-b max-[335px]:border-b-text/50 max-[335px]:pb-8">
             <InputField
               defaultValue={dayes.mon?.profit}
               onInput={handleChangeInput}
@@ -135,7 +132,7 @@ const Weekly = () => {
               name="FridayProfit"
             />
           </div>
-          <div className="w-1/2 space-y-2">
+          <div className="max-[335px]:w-full w-1/2 space-y-2">
             <InputField
               defaultValue={dayes.mon?.commission}
               onInput={handleChangeInput}
@@ -211,9 +208,7 @@ const Weekly = () => {
             opacity-0 pointer-events-none transition-all duration-300 translate-y-5 scale-95
           dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center"
         >
-          {t("Total profits: ")}{" "}
-          <NumberWithDollar number={Income[0]} />
-
+          {t("Total profits: ")} <NumberWithDollar number={Income[0]} />
         </div>
         <div
           className="sm:w-[calc(50%-0.5rem)] w-5/6 dark:bg-primary/5 
@@ -222,8 +217,7 @@ const Weekly = () => {
             delay-100
           dark:text-text bg-gray-700 text-baseColor p-4 rounded-lg justify-between flex items-center"
         >
-          {t("Total commission: ")}{" "}
-          <NumberWithDollar number={Income[1]} />
+          {t("Total commission: ")} <NumberWithDollar number={Income[1]} />
         </div>
         <div
           className="sm:w-full w-5/6 dark:bg-primary/5 
