@@ -124,7 +124,7 @@
     --text: 233, 237, 255;
   }
   h1{
-    @apply font-bold text-xl
+    @apply font-bold text-xl;
   }
   .scrollbar::-webkit-scrollbar {
     width: .375rem!important;

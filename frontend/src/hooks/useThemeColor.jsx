@@ -9,18 +9,26 @@ const useThemeDetector = () => {
     setIsDarkTheme(e.matches);
     autoChangeThemeColor(e.matches);
   };
-
+  const manuallyChangeTheme = () => {
+    setIsDarkTheme(prev => !prev)
+    autoChangeThemeColor(!isDarkTheme)
+    localStorage.setItem(
+      "them",
+      document.documentElement.classList.contains("dark") ? "dark" : "light"
+    );
+  }
   useEffect(() => {
     const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
     if (!localStorage.getItem("them")) {
       autoChangeThemeColor(darkThemeMq.matches);
     } else {
       document.documentElement.classList.add(localStorage.getItem("them"));
+      setIsDarkTheme(localStorage.getItem("them") === "dark" ? true : false)
     }
     darkThemeMq.addListener(mqListener);
     return () => darkThemeMq.removeListener(mqListener);
   }, []);
-  return isDarkTheme;
+  return { isDarkTheme, manuallyChangeTheme };
 };
 export default useThemeDetector;
 

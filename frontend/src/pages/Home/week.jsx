@@ -5,6 +5,7 @@ import { getWeekByIdHttp } from "../../services/HTTP";
 import { useTranslation } from "react-i18next";
 import NumberWithDollar from "../../components/numberWithDollar";
 import {
+  Brush,
   CartesianGrid,
   Legend,
   Line,
@@ -87,14 +88,14 @@ const Week = () => {
           margin={{
             top: 5,
             right: 10,
-            left: 0,
+            left: -20,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="5 5" stroke="#a1a1a155" />
           <XAxis color="#ff0000" dataKey="strDate" />
           <YAxis />
-          <Tooltip/>
+          <Tooltip contentStyle={{backgroundColor:"rgb(var(--baseColor))"}}/>
           <Legend />
           <Line
             type="monotone"

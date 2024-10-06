@@ -47,5 +47,6 @@
   "Server error":"خطای سمت سرور",
   "User is exist":"این کاربر از قبل وجود دارد",
   "Week":"هفته",
-  "Date":"تاریخ"
+  "Date":"تاریخ",
+  "The sum of all weeks":"مجموع تمام هفته ها"
 }

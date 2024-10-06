@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
-ENV VITE_API_META_URL=http://localhost:5000
+ENV VITE_API_META_URL=https://docker.sobelz.ir
 
 COPY . .
 

@@ -1,14 +1,11 @@
+
+import {useSettingContext } from "../context/setting";
+
 const ThemeSwitch = () => {
-  const manuallyChangeTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    localStorage.setItem(
-      "them",
-      document.documentElement.classList.contains("dark") ? "dark" : "light"
-    );
-  };
+  const {manuallyChangeTheme} = useSettingContext()
   return (
     <button
-      onClick={manuallyChangeTheme}
+      onClick={()=>manuallyChangeTheme()}
       className="ring-2 overflow-hidden ring-text h-7 w-7 relative rounded-lg center"
     >
       <svg

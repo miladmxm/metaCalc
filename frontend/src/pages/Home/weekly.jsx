@@ -89,8 +89,8 @@ const Weekly = () => {
     <div className="h-full space-y-5 overflow-auto scrollbar pr-1 rtl:pl-1">
       <h2>{t("Weekly income")}</h2>
       <form onSubmit={handleFormSubmit}>
-        <div className="flex gap-5">
-          <div className="w-1/2 space-y-2">
+        <div className="flex gap-5 max-[335px]:flex-col">
+          <div className="max-[335px]:w-full w-1/2 space-y-2 max-[335px]:border-b max-[335px]:border-b-text/50 max-[335px]:pb-8">
             <InputField
               defaultValue={dayes.mon?.profit}
               onInput={handleChangeInput}
@@ -132,7 +132,7 @@ const Weekly = () => {
               name="FridayProfit"
             />
           </div>
-          <div className="w-1/2 space-y-2">
+          <div className="max-[335px]:w-full w-1/2 space-y-2">
             <InputField
               defaultValue={dayes.mon?.commission}
               onInput={handleChangeInput}

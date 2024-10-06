@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import i18n from "../config/i18n";
 import handleChangeDirection from "../utils/changeDirection";
@@ -6,17 +6,18 @@ import { supportedLngs } from "../config/langs";
 import useThemeDetector from '../hooks/useThemeColor'
 import { useIsFetching } from "@tanstack/react-query";
 import Loading from "../components/loading";
-export const settingContext = createContext({
+const settingContext = createContext({
   language: "",
   dir: "ltr",
   handleLanguageChange: () => { },
 });
+export const useSettingContext = () => useContext(settingContext)
 
 const SettingContextProvider = ({ children }) => {
   const Navigate = useNavigate();
   const [language, setLanguage] = useState(i18n.language);
   const [dir, setDir] = useState('ltr');
-  useThemeDetector();
+  const { isDarkTheme, manuallyChangeTheme } = useThemeDetector();
   const isFetching = useIsFetching()
   const handleLanguageChange = (lang) => {
     const [pathLang, ...path] = location.pathname.slice(1).split("/");
@@ -42,8 +43,8 @@ const SettingContextProvider = ({ children }) => {
     handleLanguageChange();
   }, []);
   return (
-    <settingContext.Provider value={{ handleLanguageChange, language, dir }}>
-      {isFetching?<Loading />:null}
+    <settingContext.Provider value={{ handleLanguageChange, language, dir, manuallyChangeTheme, isDarkTheme }}>
+      {isFetching ? <Loading /> : null}
       {children}
     </settingContext.Provider>
   );

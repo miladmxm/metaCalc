@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import cn from "classnames";
-import { settingContext } from "../context/setting";
+import { useSettingContext } from "../context/setting";
 import { supportedLngs } from "../config/langs";
 import { useTranslation } from "react-i18next";
 const LanguageSwitch = () => {
-  const { language, handleLanguageChange } = useContext(settingContext);
+  const { language, handleLanguageChange } = useSettingContext();
   const { t } = useTranslation();
   const [displayLangs, setDisplayLangs] = useState(false);
   const handleChange = (lang) => {
