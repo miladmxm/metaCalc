@@ -2,10 +2,7 @@ import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
 import { useRef, useState } from "react";
 import AuthUser from "../../HOC/authUser";
-import {
-  getcurrentweekHttp,
-  updateWeekByIdHttp,
-} from "../../services/HTTP";
+import { getcurrentweekHttp, updateWeekByIdHttp } from "../../services/HTTP";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,30 +29,38 @@ const Weekly = () => {
     e.preventDefault();
     const newDayes = { ...dayes };
     const {
+      SundayProfit,
       MondayProfit,
       TuesdayProfit,
       WednesdayProfit,
       ThursdayProfit,
       FridayProfit,
+      SatdayProfit,
+      SundayCommission,
       MondayCommission,
       TuesdayCommission,
       WednesdayCommission,
       ThursdayCommission,
       FridayCommission,
+      SatdayCommission,
     } = e.target;
     const ProfitFields = [
+      SundayProfit,
       MondayProfit,
       TuesdayProfit,
       WednesdayProfit,
       ThursdayProfit,
       FridayProfit,
+      SatdayProfit,
     ];
     const CommissionFields = [
+      SundayCommission,
       MondayCommission,
       TuesdayCommission,
       WednesdayCommission,
       ThursdayCommission,
       FridayCommission,
+      SatdayCommission,
     ];
     let commissionIncome = 0,
       profitIncome = 0;
@@ -91,6 +96,14 @@ const Weekly = () => {
       <form onSubmit={handleFormSubmit}>
         <div className="flex gap-5 max-[335px]:flex-col">
           <div className="max-[335px]:w-full w-1/2 space-y-2 max-[335px]:border-b max-[335px]:border-b-text/50 max-[335px]:pb-8">
+            <InputField
+              defaultValue={dayes.sun?.profit}
+              onInput={handleChangeInput}
+              label={t("Sun profit")}
+              mainName={"sun"}
+              placeholder={t("100.112 OR -100.112")}
+              name="SundayProfit"
+            />
             <InputField
               defaultValue={dayes.mon?.profit}
               onInput={handleChangeInput}
@@ -131,8 +144,24 @@ const Weekly = () => {
               mainName={"fri"}
               name="FridayProfit"
             />
+            <InputField
+              defaultValue={dayes.sat?.profit}
+              onInput={handleChangeInput}
+              label={t("Sat profit")}
+              placeholder={t("100.112 OR -100.112")}
+              mainName={"sat"}
+              name="SatdayProfit"
+            />
           </div>
           <div className="max-[335px]:w-full w-1/2 space-y-2">
+            <InputField
+              defaultValue={dayes.sun?.commission}
+              onInput={handleChangeInput}
+              mainName={"sun"}
+              label={t("Sun commission")}
+              placeholder={t("100.112 OR -100.112")}
+              name="SundayCommission"
+            />
             <InputField
               defaultValue={dayes.mon?.commission}
               onInput={handleChangeInput}
@@ -173,25 +202,35 @@ const Weekly = () => {
               placeholder={t("100.112 OR -100.112")}
               name="FridayCommission"
             />
+            <InputField
+              defaultValue={dayes.sat?.commission}
+              onInput={handleChangeInput}
+              mainName={"sat"}
+              label={t("Sat commission")}
+              placeholder={t("100.112 OR -100.112")}
+              name="SatdayCommission"
+            />
           </div>
         </div>
-        <button
-          className="w-full bg-primary/10 center gap-2 rounded-xl p-3 mt-5"
-          type="submit"
-        >
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 448 512"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+        <div className="sticky bottom-0 z-50 backdrop-blur-sm rounded-xl">
+          <button
+            className="w-full bg-primary/10 center gap-2 rounded-xl p-3 mt-5"
+            type="submit"
           >
-            <path d="M436 160H12c-6.627 0-12-5.373-12-12v-36c0-26.51 21.49-48 48-48h48V12c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v52h128V12c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v52h48c26.51 0 48 21.49 48 48v36c0 6.627-5.373 12-12 12zM12 192h424c6.627 0 12 5.373 12 12v260c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V204c0-6.627 5.373-12 12-12zm333.296 95.947l-28.169-28.398c-4.667-4.705-12.265-4.736-16.97-.068L194.12 364.665l-45.98-46.352c-4.667-4.705-12.266-4.736-16.971-.068l-28.397 28.17c-4.705 4.667-4.736 12.265-.068 16.97l82.601 83.269c4.667 4.705 12.265 4.736 16.97.068l142.953-141.805c4.705-4.667 4.736-12.265.068-16.97z"></path>
-          </svg>
-          <span>{t("Submit")}</span>
-        </button>
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 448 512"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M436 160H12c-6.627 0-12-5.373-12-12v-36c0-26.51 21.49-48 48-48h48V12c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v52h128V12c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v52h48c26.51 0 48 21.49 48 48v36c0 6.627-5.373 12-12 12zM12 192h424c6.627 0 12 5.373 12 12v260c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V204c0-6.627 5.373-12 12-12zm333.296 95.947l-28.169-28.398c-4.667-4.705-12.265-4.736-16.97-.068L194.12 364.665l-45.98-46.352c-4.667-4.705-12.266-4.736-16.971-.068l-28.397 28.17c-4.705 4.667-4.736 12.265-.068 16.97l82.601 83.269c4.667 4.705 12.265 4.736 16.97.068l142.953-141.805c4.705-4.667 4.736-12.265.068-16.97z"></path>
+            </svg>
+            <span>{t("Submit")}</span>
+          </button>
+        </div>
       </form>
       <div
         ref={resultRef}

@@ -5,7 +5,6 @@ import { getWeekByIdHttp } from "../../services/HTTP";
 import { useTranslation } from "react-i18next";
 import NumberWithDollar from "../../components/numberWithDollar";
 import {
-  Brush,
   CartesianGrid,
   Legend,
   Line,
@@ -16,6 +15,7 @@ import {
   YAxis,
 } from "recharts";
 import sum from "../../utils/sum";
+import BackBtn from "../../components/backBtn";
 const Week = () => {
   const { id } = useParams();
   const {
@@ -40,7 +40,9 @@ const Week = () => {
     return day
   })
   return (
-    <div className="space-y-5 h-full w-full max-w-[calc(100svw-24px)] flex flex-col">
+    <div className="space-y-5 h-full w-full max-w-[calc(100svw-24px)] flex flex-col scrollbar pr-1 rtl:pr-0 rtl:pl-1 overflow-x-hidden overflow-y-auto">
+      <div className="flex p-1 gap-2 rtl:flex-row-reverse rtl:justify-between items-center">
+        <BackBtn/>
       <h1>
         {t("Week")} (
         <small className="opacity-70 font-light">
@@ -48,7 +50,8 @@ const Week = () => {
         </small>
         )
       </h1>
-      <div className="overflow-x-auto max-w-full w-full scrollbar pb-2">
+      </div>
+      <div className="overflow-x-auto min-h-max max-w-full w-full scrollbar pb-2">
         <table className="w-full min-w-96 overflow-hidden rounded-xl bg-primary/10 table-auto">
           <thead className="bg-slate-900/70">
             <tr>
@@ -77,7 +80,7 @@ const Week = () => {
         </table>
       </div>
       <ResponsiveContainer
-        className={"flex-auto max-h-[50svh] center"}
+        className={"flex-auto max-h-[50svh] center min-h-52"}
         width="100%"
         height=""
       >
