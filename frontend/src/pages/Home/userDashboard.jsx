@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import cn from "classnames";
@@ -28,6 +28,7 @@ import { useState } from "react";
 
 const UserDashboard = () => {
   const singOutMutation = useSignOut();
+  const navigate = useNavigate()
   const { isDarkTheme } = useSettingContext();
   const {
     t,
@@ -52,21 +53,21 @@ const UserDashboard = () => {
       return day;
     });
   }
-  
+
   const [startDate, setStartDate] = useState(new Date());
   const logout = async () => {
     singOutMutation();
   };
 
-  const handleSelectedDate=(date)=>{
-    console.log(date)
-    setStartDate(date)
-  }
+  const handleSelectedDate = (date) => {
+    navigate(`week/add/${date.toISOString()}`);
+    setStartDate(date);
+  };
   return (
     <div className="h-full flex flex-col gap-3">
-      <div className="flex justify-between items-center">
+      <div className="flex rtl:flex-row-reverse justify-between items-center">
         <button
-          className="ml-0 mr-auto center gap-1 bg-error/10 w-fit px-4 rounded-lg py-2 "
+          className=" center gap-1 bg-error/10 w-fit px-4 rounded-lg py-2 "
           onClick={logout}
         >
           {t("Logout")}
@@ -91,10 +92,8 @@ const UserDashboard = () => {
 
         <DatePicker
           customInput={
-            <button
-              className="p-2 bg-success/30 rounded-lg text-sm center gap-1"
-            >
-              <span>Add previous weeks</span>
+            <button className="p-2 bg-success/30 rounded-lg text-sm center gap-1">
+              <span>{t("Add previous weeks")}</span>
               <svg
                 className="text-lg"
                 stroke="currentColor"
@@ -114,14 +113,23 @@ const UserDashboard = () => {
           // selectsRange={true}
           onChange={handleSelectedDate}
           dateFormat="I/R"
+          maxDate={new Date()}
+          onWeekSelect={(...obj) => {
+            console.log(obj);
+          }}
           locale="en-GB"
           // showWeekNumbers
           // showMonthYearDropdown
-          excludeDateIntervals={data?.weeks?.map(d=>({start:new Date(d.from).setUTCDate(new Date(d.from).getUTCDate()-1),end:new Date(d.to).setUTCDate(new Date(d.to).getUTCDate() - 1)}))}
+          // excludeDateIntervals={data?.weeks?.map(d=>({start:new Date(d.from).setUTCDate(new Date(d.from).getUTCDate()-1),end:new Date(d.to).setUTCDate(new Date(d.to).getUTCDate() - 1)}))}
+          excludeDateIntervals={data?.weeks?.map((d) => ({
+            start: d.from.replaceAll("Z", ""),
+            end: d.to.replaceAll("Z", ""),
+          }))}
           withPortal
           portalId="root-portal"
+          // calendarStartDay={1}
           showWeekPicker
-          showWeekNumbers
+          // showWeekNumbers
         />
       </div>
 
@@ -206,10 +214,10 @@ const UserDashboard = () => {
                 <div className="flex justify-between border-b border-text/50 pb-4">
                   <span>
                     {t("From")}:{" "}
-                    {new Date(week.from).toLocaleDateString(language)}
+                    {new Date(week.from.replaceAll("Z","")).toLocaleDateString(language)}
                   </span>
                   <span>
-                    {t("To")}: {new Date(week.to).toLocaleDateString(language)}
+                    {t("To")}: {new Date(week.to.replaceAll("Z","")).toLocaleDateString(language)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center [&_small]:flex [&_small]:items-center [&_small]:gap-1">

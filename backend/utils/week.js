@@ -8,7 +8,7 @@ const getCurrentWeek = (d) => {
 
     // start date + 7 = next start week with time ziro and next start week - one miliseconds = end of current week
     const endDate = new Date(startDate)
-    endDate.setUTCDate(endDate.getDate() + 6)
+    endDate.setUTCDate(endDate.getUTCDate() + 7)
     endDate.setUTCMilliseconds(endDate.getUTCMilliseconds() - 1)
 
 

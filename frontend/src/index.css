@@ -172,7 +172,12 @@
 }
 
 
-
+.react-datepicker__week:not(:has(.react-datepicker__day--disabled)):hover .react-datepicker__day {
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  background-color: gray;
+}
 
 
 
