@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const InputField = ({ label, placeholder, name, onInput, icon = true, defaultValue, mainName }) => {
+const InputField = ({ label, placeholder, name, onInput=()=>{}, icon = true, defaultValue, mainName }) => {
   const fieldsetRef = useRef();
   return (
     <fieldset

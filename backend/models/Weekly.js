@@ -19,11 +19,13 @@ const WeeklySchema = Schema(
       type: Schema.Types.ObjectId,
     },
     dayes: {
+      sun: dayesType,
       mon: dayesType,
       tue: dayesType,
       wed: dayesType,
       thu: dayesType,
       fri: dayesType,
+      sat: dayesType,
     }
   },
   { timestamps: true }

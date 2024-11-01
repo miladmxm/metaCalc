@@ -23,7 +23,7 @@ export const getAllWeek = async (req, res, next) => {
     const weeks = await Weeks.find(
       { user: req.user_id },
       "from to _id dayes"
-    ).sort("-createdAt");
+    ).sort("-from");
     const [startWeek] = getCurrentWeek();
 
     const updatedWeeks = weeks.map((week) => {
@@ -50,16 +50,68 @@ export const getAllWeek = async (req, res, next) => {
     next(err);
   }
 };
-export const getWeekById = async (req,res,next)=>{
+export const getWeekById = async (req, res, next) => {
   try {
+    const [startWeek] = getCurrentWeek();
+
+
+   
     const week = await Weeks.findOne({
-      _id:req.params.id,
-      user:req.user_id
-    })
-    if(!week) GenerateError(await t("Not found", req.query.lang),404)
-    const weekWithDate = addDateToWeekDays(week.toObject())
-  
-    res.status(200).json({week:weekWithDate})
+      _id: req.params.id,
+      user: req.user_id,
+    });
+    
+    if (!week) GenerateError(await t("Not found", req.query.lang), 404);
+    const weekWithDate = addDateToWeekDays(week.toObject());
+    if (startWeek - weekWithDate.from === 0) {
+      weekWithDate.currentWeek = true;
+    }
+    res.status(200).json({ week: weekWithDate });
+  } catch (err) {
+    next(err);
+  }
+};
+export const weekIsExistByDate = async (req, res, next) => {
+  try {
+    const [start, end] = getCurrentWeek(new Date(req.params.date));
+
+    const week = await Weeks.findOne({
+      from: start,
+      to: end,
+      user: req.user_id,
+    });
+    if (week) {
+      res.status(200).json({ message: "week is exist" });
+    } else {
+      res.status(200).json({ message: "week does not exist", start, end });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addLastWeek = async (req,res,next)=>{
+  try {
+    const [start, end] = getCurrentWeek(new Date(req.params.date));
+    let week = await Weeks.findOne({
+      from: start,
+      to: end,
+      user: req.user_id,
+    });
+    if(week){
+      week.dayes = req.body.dayes;
+      await week.save()
+      res.status(200)
+    }else{
+      week= await Weeks.create({
+        from: start,
+        to: end,
+        user: req.user_id,
+        dayes:req.body.dayes
+      });
+      res.status(201)
+    }
+    res.json({week})
   } catch (err) {
     next(err)
   }
@@ -142,7 +194,9 @@ export const registerUser = async (req, res, next) => {
       GenerateError(await t("User is exist", req.query.lang), 400);
     const user = await Users.create({ username, email, password });
     setToken(res, username, user._id);
-    res.status(201).json({username:user.username,email:user.email,_id:user._id});
+    res
+      .status(201)
+      .json({ username: user.username, email: user.email, _id: user._id });
   } catch (err) {
     next(err);
   }
@@ -164,7 +218,9 @@ export const loginUser = async (req, res, next) => {
         404
       );
     setToken(res, username, user._id);
-    res.status(200).json({username:user.username,email:user.email,_id:user._id});
+    res
+      .status(200)
+      .json({ username: user.username, email: user.email, _id: user._id });
   } catch (err) {
     next(err);
   }
