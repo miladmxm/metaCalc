@@ -17,7 +17,7 @@ import { weekUpdateValidation } from "../validations/user.js";
 
 import isFirstRequest from "../middlewares/firstRequest.js";
 import authProvider from "../middlewares/auth.js";
-import { getAllWeek, getCurrentWeekly, getWeekById, initUser, loginUser, logout, registerUser, updateWeekById } from "../controllers/user.js";
+import { addLastWeek, getAllWeek, getCurrentWeekly, getWeekById, initUser, loginUser, logout, registerUser, updateWeekById, weekIsExistByDate } from "../controllers/user.js";
 
 const adminAuth = authProvider(true);
 const userAuth = authProvider(false);
@@ -52,5 +52,7 @@ userRouter.delete("/signout",userAuth,logout)
 userRouter.get("/logout",userAuth,logout)
 userRouter.get("/getcurrentweek",userAuth,getCurrentWeekly)
 userRouter.get("/weeks",userAuth,getAllWeek)
+userRouter.get("/weeks/isexist/:date",userAuth,weekIsExistByDate)
+userRouter.post("/weeks/:date",userAuth,validation(weekUpdateValidation),addLastWeek)
 userRouter.get("/weeks/:id",userAuth,getWeekById)
-userRouter.put("/weeks/:id",validation(weekUpdateValidation),userAuth,updateWeekById)
+userRouter.put("/weeks/:id",userAuth,validation(weekUpdateValidation),updateWeekById)

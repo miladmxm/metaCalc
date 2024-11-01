@@ -46,3 +46,6 @@ export const getcurrentweekHttp = (signal) =>
 export const getWeekByIdHttp = (weekId,signal) => http.get(`/user/weeks/${weekId}`,{signal});
 export const updateWeekByIdHttp = (data, weekId) =>
   http.put(`/user/weeks/${weekId}`, data);
+
+export const getWeekIsExistHttp = (date,signal) => http.get(`/user/weeks/isexist/${date}`,{signal});
+export const addLastWeekHttp = (date,data) => http.post(`/user/weeks/${date}`,data);

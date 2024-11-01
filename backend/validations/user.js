@@ -12,11 +12,13 @@ const weekUpdateSchema = {
     dayes: {
       type: "object",
       properties: {
+        sun: dayTypes,
         mon: dayTypes,
-        mon: dayTypes,
-        mon: dayTypes,
-        mon: dayTypes,
-        mon: dayTypes,
+        tue: dayTypes,
+        wed: dayTypes,
+        thu: dayTypes,
+        fri: dayTypes,
+        sat: dayTypes,
       },
     },
   },

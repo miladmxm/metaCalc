@@ -11,10 +11,6 @@ const getCurrentWeek = (d) => {
     endDate.setUTCDate(endDate.getUTCDate() + 7)
     endDate.setUTCMilliseconds(endDate.getUTCMilliseconds() - 1)
 
-
-    // startDate.setUTCDate(startDate.getUTCDate() + 1)
-    // endDate.setUTCDate(endDate.getUTCDate() + 1)
-
     return [startDate, endDate]
 }
 export default getCurrentWeek

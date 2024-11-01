@@ -22,8 +22,10 @@ import {
   YAxis,
 } from "recharts";
 import { useSettingContext } from "../../context/setting";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { faIR } from 'date-fns/locale/fa-IR';
+registerLocale('fa', faIR)
 import { useState } from "react";
 
 const UserDashboard = () => {
@@ -113,11 +115,12 @@ const UserDashboard = () => {
           // selectsRange={true}
           onChange={handleSelectedDate}
           dateFormat="I/R"
+          locale={language}
           maxDate={new Date()}
           onWeekSelect={(...obj) => {
             console.log(obj);
           }}
-          locale="en-GB"
+          // locale="en-GB"
           // showWeekNumbers
           // showMonthYearDropdown
           // excludeDateIntervals={data?.weeks?.map(d=>({start:new Date(d.from).setUTCDate(new Date(d.from).getUTCDate()-1),end:new Date(d.to).setUTCDate(new Date(d.to).getUTCDate() - 1)}))}
@@ -127,12 +130,11 @@ const UserDashboard = () => {
           }))}
           withPortal
           portalId="root-portal"
-          // calendarStartDay={1}
+          calendarStartDay={0}
           showWeekPicker
           // showWeekNumbers
         />
       </div>
-
       <div className="max-h-full pr-1 rtl:pl-1 overflow-auto scrollbar space-y-5">
         <>
           {data?.weeks?.length === 0 ? (

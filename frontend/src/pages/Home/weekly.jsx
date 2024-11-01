@@ -1,11 +1,12 @@
-import { useTranslation } from "react-i18next";
-import InputField from "../../components/inputField";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import InputField from "../../components/inputField";
 import AuthUser from "../../HOC/authUser";
 import { getcurrentweekHttp, updateWeekByIdHttp } from "../../services/HTTP";
 import sum from "../../utils/sum";
 import NumberWithDollar from "../../components/numberWithDollar";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import constant from "../../constant";
 
 const Weekly = () => {
@@ -214,7 +215,8 @@ const Weekly = () => {
         </div>
         <div className="sticky bottom-0 z-50 backdrop-blur-sm rounded-xl">
           <button
-            className="w-full bg-primary/10 center gap-2 rounded-xl p-3 mt-5"
+            disabled={updateWeekMutation.isPending}
+            className="w-full disabled:opacity-50 bg-primary/10 center gap-2 rounded-xl p-3 mt-5"
             type="submit"
           >
             <svg
