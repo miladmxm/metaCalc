@@ -1,43 +1,40 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import BackBtn from "../../components/backBtn";
-import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import constant from "../../constant";
-import { addLastWeekHttp, getWeekIsExistHttp } from "../../services/HTTP";
-import { useEffect } from "react";
+import { getWeekByIdHttp, updateWeekByIdHttp } from "../../services/HTTP";
+import { useTranslation } from "react-i18next";
 import InputField from "../../components/inputField";
 
-const AddLastWeeks = () => {
-  const { date } = useParams();
+const EditWeek = () => {
+  const { id } = useParams();
   const {
-    t,
     i18n: { language },
+    t,
   } = useTranslation();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data, isError } = useQuery({
-    queryKey: [constant.WEEK_IS_EXIST, date],
-    queryFn: ({ signal }) => getWeekIsExistHttp(date, signal),
-    retry: false,
+  const { data, isSuccess } = useQuery({
+    queryKey: [constant.WEEK_BY_ID, id],
+    queryFn: ({ signal }) => getWeekByIdHttp(id, signal),
   });
-  if (isError) {
-    navigate(`/${language}/dashboard`, { replace: true });
+  if (!isSuccess) {
+    return null;
   }
-  useEffect(() => {
-    if (data?.message === "week is exist") {
-      navigate(`/${language}/dashboard`, { replace: true });
-    }
-  }, [data]);
-
+  if (data?.week?.currentWeek) {
+    return <Navigate to={`/${language}/weekly`} />;
+  }
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (formDataJson) => addLastWeekHttp(date, formDataJson),
-    mutationKey: [constant.ADD_LAST_EXIST],
+    mutationKey: [constant.UPDATE_WEEK_KEY, id],
+    mutationFn: (data) => updateWeekByIdHttp(data, id),
     onSuccess: () => {
-      queryClient.invalidateQueries([constant.WEEKS_KEY]).then(() => {
-        navigate("/dashboard", { replace: true });
+      queryClient.invalidateQueries([constant.WEEKS_KEY]);
+      queryClient.invalidateQueries([constant.WEEK_BY_ID, id]).then(() => {
+        navigate(`/${language}/dashboard/week/${id}`);
       });
     },
   });
+  const dayes = data.week.dayes;
   const handleSubmit = (e) => {
     e.preventDefault();
     const dayes = {};
@@ -52,29 +49,22 @@ const AddLastWeeks = () => {
           [item.name.split("-")[1]]: Number(item.value),
         };
       });
-
     mutate({ dayes });
   };
+
   return (
     <div className="space-y-5 h-full w-full max-w-[calc(100svw-24px)] flex flex-col scrollbar pr-1 rtl:pr-0 rtl:pl-1 overflow-x-hidden overflow-y-auto">
       <div className="flex p-1 gap-2 rtl:flex-row-reverse rtl:justify-between items-center">
         <BackBtn />
-        <h1 className="flex sm:items-center gap-2 flex-col sm:flex-row ">
-          {t("Week")}:
-          <div className="flex">
-            <small className="font-normal">
-              {t("from")}{" "}
-              {new Date(data?.start?.replaceAll("Z", "")).toLocaleDateString(
-                language
-              )}
+        <h1 className="flex items-center justify-between flex-auto gap-2">
+          <span>
+            {t("Week")} (
+            <small className="opacity-70 font-light">
+              {t("from")} :{" "}
+              {new Date(data.week.from).toLocaleDateString(language)}
             </small>
-            <small className="font-normal">
-              {t("To")}{" "}
-              {new Date(data?.end?.replaceAll("Z", "")).toLocaleDateString(
-                language
-              )}
-            </small>
-          </div>
+            )
+          </span>
         </h1>
       </div>
       <form onSubmit={handleSubmit}>
@@ -97,6 +87,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="sun-profit"
                   mainName="profit"
+                  defaultValue={dayes.sun.profit}
                 />
               </td>
               <td>
@@ -105,6 +96,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="sun-commission"
                   mainName="commission"
+                  defaultValue={dayes.sun.commission}
                 />
               </td>
             </tr>
@@ -115,6 +107,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="mon-profit"
                   mainName="profit"
+                  defaultValue={dayes.mon.profit}
                 />
               </td>
               <td>
@@ -123,6 +116,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="mon-commission"
                   mainName="commission"
+                  defaultValue={dayes.mon.commission}
                 />
               </td>
             </tr>
@@ -133,6 +127,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="tue-profit"
                   mainName="profit"
+                  defaultValue={dayes.tue.profit}
                 />
               </td>
               <td>
@@ -141,6 +136,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="tue-commission"
                   mainName="commission"
+                  defaultValue={dayes.tue.commission}
                 />
               </td>
             </tr>
@@ -151,6 +147,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="wed-profit"
                   mainName="profit"
+                  defaultValue={dayes.wed.profit}
                 />
               </td>
               <td>
@@ -159,6 +156,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="wed-commission"
                   mainName="commission"
+                  defaultValue={dayes.wed.commission}
                 />
               </td>
             </tr>
@@ -169,6 +167,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="thu-profit"
                   mainName="profit"
+                  defaultValue={dayes.thu.profit}
                 />
               </td>
               <td>
@@ -177,6 +176,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="thu-commission"
                   mainName="commission"
+                  defaultValue={dayes.thu.commission}
                 />
               </td>
             </tr>
@@ -187,6 +187,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="fri-profit"
                   mainName="profit"
+                  defaultValue={dayes.fri.profit}
                 />
               </td>
               <td>
@@ -195,6 +196,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="fri-commission"
                   mainName="commission"
+                  defaultValue={dayes.fri.commission}
                 />
               </td>
             </tr>
@@ -205,6 +207,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="sat-profit"
                   mainName="profit"
+                  defaultValue={dayes.sat.profit}
                 />
               </td>
               <td>
@@ -213,6 +216,7 @@ const AddLastWeeks = () => {
                   placeholder={t("100.112 OR -100.112")}
                   name="sat-commission"
                   mainName="commission"
+                  defaultValue={dayes.sat.commission}
                 />
               </td>
             </tr>
@@ -243,4 +247,4 @@ const AddLastWeeks = () => {
   );
 };
 
-export default AddLastWeeks;
+export default EditWeek;

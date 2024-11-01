@@ -117,13 +117,6 @@ const UserDashboard = () => {
           dateFormat="I/R"
           locale={language}
           maxDate={new Date()}
-          onWeekSelect={(...obj) => {
-            console.log(obj);
-          }}
-          // locale="en-GB"
-          // showWeekNumbers
-          // showMonthYearDropdown
-          // excludeDateIntervals={data?.weeks?.map(d=>({start:new Date(d.from).setUTCDate(new Date(d.from).getUTCDate()-1),end:new Date(d.to).setUTCDate(new Date(d.to).getUTCDate() - 1)}))}
           excludeDateIntervals={data?.weeks?.map((d) => ({
             start: d.from.replaceAll("Z", ""),
             end: d.to.replaceAll("Z", ""),

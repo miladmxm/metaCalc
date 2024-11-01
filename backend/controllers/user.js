@@ -52,13 +52,20 @@ export const getAllWeek = async (req, res, next) => {
 };
 export const getWeekById = async (req, res, next) => {
   try {
+    const [startWeek] = getCurrentWeek();
+
+
+   
     const week = await Weeks.findOne({
       _id: req.params.id,
       user: req.user_id,
     });
+    
     if (!week) GenerateError(await t("Not found", req.query.lang), 404);
     const weekWithDate = addDateToWeekDays(week.toObject());
-
+    if (startWeek - weekWithDate.from === 0) {
+      weekWithDate.currentWeek = true;
+    }
     res.status(200).json({ week: weekWithDate });
   } catch (err) {
     next(err);

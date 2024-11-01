@@ -8,6 +8,7 @@ import Login from "../pages/Home/Login";
 import UserDashboard from "../pages/Home/userDashboard";
 import Week from "../pages/Home/week";
 import AddLastWeeks from "../pages/Home/AddLastWeeks";
+import EditWeek from "../pages/Home/editWeek";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
           {
             path:"dashboard/week/:id",
             element:<Week/>
+          },
+          {
+            path:"dashboard/week/edit/:id",
+            element:<EditWeek/>
           }
         ]
       },
