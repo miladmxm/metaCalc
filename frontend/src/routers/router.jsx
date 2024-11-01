@@ -7,7 +7,7 @@ import Weekly from "../pages/Home/weekly";
 import Login from "../pages/Home/Login";
 import UserDashboard from "../pages/Home/userDashboard";
 import Week from "../pages/Home/week";
-import AddLastWeeks from "../pages/Home/AddLastWeeks";
+import AddLastWeeks from "../pages/Home/addLastWeeks";
 import EditWeek from "../pages/Home/editWeek";
 
 const router = createBrowserRouter([
